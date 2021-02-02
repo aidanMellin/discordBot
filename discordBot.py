@@ -156,6 +156,8 @@ async def on_ready():
     )
     channel = bot.get_channel(802923855161065495)
     await channel.send("**Bot Established**")
+    
+    #COMMENT BELOW OUT IF YOU DONT NEED THE DAILY TASK
     daily_task.start()
 
 @tasks.loop(hours=24)
@@ -165,7 +167,7 @@ async def daily_task():
     """
     channel = bot.get_channel(802923855161065495)
     screen = date.today().strftime('%d-%m-%Y')+".png"
-    if(os.path.exists("screens/"+screen)):
+    if(os.path.exists("../dailyHealthBot/screens/"+screen)):
         await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
     else:
         await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
