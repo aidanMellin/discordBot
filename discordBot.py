@@ -15,10 +15,6 @@ import datetime as dt
 import asyncio
 import time
 
-import giphy_client
-from giphy_client.rest import ApiException
-from pprint import pprint
-
 """Load all variables (Bot guild and bot token))
 """
 load_dotenv()
