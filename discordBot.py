@@ -2,16 +2,22 @@
 # bot.py
 import os
 from os import path
+
 import discord
 from discord.file import File
 from discord.ext import tasks
 from discord.ext import commands
 from dotenv import load_dotenv
+
 import random
 from datetime import date
 import datetime as dt
 import asyncio
 import time
+
+import giphy_client
+from giphy_client.rest import ApiException
+from pprint import pprint
 
 """Load all variables (Bot guild and bot token))
 """
@@ -156,9 +162,26 @@ async def on_ready():
     )
     channel = bot.get_channel(802923855161065495)
     await channel.send("**Bot Established**")
-    
+    change_daily_status.start()
     #COMMENT BELOW OUT IF YOU DONT NEED THE DAILY TASK
     daily_task.start()
+
+@tasks.loop(hours=24)
+async def change_daily_status():
+    channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
+    day_status = ["","","wait it fucking tueaday .", "<:dizzy:1b3817ca3b1dc991baefdb3079ed0624>Wooback Wednesday","dababy dursday","",""] #Status for each dotw
+    dotw = dt.datetime.today().weekday() #Day of the week
+    await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
+    if dotw == 4:
+        await channel.send(file=discord.File('media/dababy.gif'))
+
+@change_daily_status.before_loop
+async def before_status():
+    for _ in range(60*60*24):
+        if dt.datetime.now().hour == 17:
+            print("updating status")
+            return
+        await asyncio.sleep(60*30) #Check every 30 minutes
 
 @tasks.loop(hours=24)
 async def daily_task():

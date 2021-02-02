@@ -8,6 +8,10 @@ dailyHealthBot repo I also have on my account.
 There are some cool functionalities of this bot. 
 The default trigger command is '~'
 
+Status Update:
+    This app will update the status of the bot to a series of keywords that are
+    determined by the day of the week
+
 Help:
     Custom help message that is separated into tiers.
 
