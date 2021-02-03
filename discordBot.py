@@ -15,7 +15,8 @@ import datetime as dt
 import asyncio
 import time
 
-"""Load all variables (Bot guild and bot token))
+"""
+Load all variables (Bot guild and bot token))
 """
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -53,6 +54,9 @@ async def help(ctx, *help_args):
     await ctx.channel.send(resp) #After file has been read and formatted, send as one message to the channel the command was called from
 
 def todo_add(author, todo_arg):
+    """
+    TODO Add Function utility. Adds user indicated todo's to stored text files under todo_persist/
+    """
     with open(author+".txt", 'a+') as fp: #Open as a+ so it appends to the bottom of the file (or creates it)
         fp.seek(0) #Redundancy
         todo_add = " ".join(todo_arg[1:]) #Each call will have one todo to add, so combine the split args into one string to add to todo
@@ -60,6 +64,9 @@ def todo_add(author, todo_arg):
         fp.write("\n")
 
 def todo_rm(author, todo_arg):
+    """
+    Removes already present todo's.
+    """
      with open(author+".txt", 'r') as fp: #Read the lines and store to a list for easier manipulation
         lines = fp.readlines()
         if len(todo_arg) > 2: #Multiple rm calls
@@ -75,6 +82,9 @@ def todo_rm(author, todo_arg):
               fp.write(line) #Rewrite the remaining lines from the lines list
 
 def todo_view(author):
+    """
+    Prettyprint format of the TODO list
+    """
     with open(author+".txt", 'r+') as fp:
         fp.seek(0) #Redundancy
         resp = ""
@@ -89,6 +99,9 @@ def todo_view(author):
     return resp
 
 def todo_p(author, todo_arg):
+    """
+    Prioritizes user-indicated todo as known by the number on the list
+    """
     with open(author+".txt", 'r+') as fp:
         pos = fp.tell()
         line = fp.readlines()
@@ -109,7 +122,7 @@ def todo_p(author, todo_arg):
 @bot.command(pass_context = True)
 async def todo(ctx, *todo_arg):
     """
-    This handles todos that typically have to do with the bot. Need to make it persistent based on a text file that will be saved in its directory. Should also add that it should send todos when it sends the daily health check
+    This handles todos that typically have to do with the bot.
     """
     todo_arg = list(todo_arg)
     todo_arg[0] = str(todo_arg[0]).lower()
@@ -144,7 +157,8 @@ async def todo(ctx, *todo_arg):
 
 @bot.event
 async def on_ready():
-    """When bot is being established, run through this (send message to signify bot has started)
+    """
+    When bot is being established, run through this (send message to signify bot has started)
     """   
     guild = None 
     for guild in bot.guilds:
@@ -164,6 +178,9 @@ async def on_ready():
 
 @tasks.loop(hours=24)
 async def change_daily_status():
+    """
+    Updates the bot's status via "Playing game: , based on the day of the week"
+    """
     channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
     day_status = ["","More like monGAY","wait it fucking tueaday .", "<:dizzy:1b3817ca3b1dc991baefdb3079ed0624>Wooback Wednesday","dababy dursday","",""] #Status for each dotw
     dotw = dt.datetime.today().weekday() #Day of the week
@@ -173,6 +190,9 @@ async def change_daily_status():
 
 @change_daily_status.before_loop
 async def before_status():
+    """
+    The function that checks the timing of change_daily_status
+    """
     for _ in range(60*60*24):
         if dt.datetime.now().hour == 0:
             print("Updating status")
@@ -204,10 +224,13 @@ async def before_task():
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user:
+    """
+    Bot checks sent messages. If a keyword or command is found, execute
+    """
+    if message.author == bot.user: #If the bot sends a message, ifnore it (so theres no recursion)
         return
     
-    monkey_recog_phrases = [
+    monkey_recog_phrases = [ #Keywords to activate monkey
         ":monkey:",
         ":gorilla:",
         ":orangutan:",
@@ -236,7 +259,7 @@ async def on_message(message):
         "mongoloids"
     ]
 
-    monkey_emotes = [
+    monkey_emotes = [ #Emote responses to when someone triggers monkey keyword
         ":monkey:",
         ":gorilla:",
         ":orangutan:",
@@ -244,7 +267,7 @@ async def on_message(message):
         "<:squadW:645483642381926421>"
     ]
 
-    joker_recog_phrases = [
+    joker_recog_phrases = [ #Keywords to activate Joker
         "society",
         "societies",
         "racist",
@@ -271,7 +294,7 @@ async def on_message(message):
         "pedophiles"
     ]
 
-    horny_recog_phrases = [
+    horny_recog_phrases = [ #Keywords to activate Horny
         "horny",
         "gasm",
         "hot",
@@ -286,7 +309,7 @@ async def on_message(message):
         "cum"
     ]
 
-    if "~" not in message.content:
+    if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
         for i in range(len(horny_recog_phrases)):
             if horny_recog_phrases[i] in str(message.content).lower():
                 keyword = horny_recog_phrases[i]
