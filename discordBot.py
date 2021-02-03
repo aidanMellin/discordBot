@@ -25,8 +25,6 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 todo_list = []
 
-
-
 bot = commands.Bot(command_prefix='~', help_command=None) #Establish a command prefix to trigger the bot
 
 @bot.command(pass_context = True)
@@ -160,85 +158,6 @@ async def on_message(message):
     """
     if message.author == bot.user: #If the bot sends a message, ifnore it (so theres no recursion)
         return
-    
-    monkey_recog_phrases = [ #Keywords to activate monkey
-        ":monkey:",
-        ":gorilla:",
-        ":orangutan:",
-        ":monkey_face:",
-        "monke",
-        "monkey",
-        "pimp",
-        "pimps",
-        "chimp",
-        "chimpin",
-        "chimps",
-        "train",
-        "orangutan",
-        "orangutans"
-        "gorilla",
-        "gorillas",
-        "banana",
-        "bananas",
-        "peanut",
-        "peanuts",
-        "primate",
-        "primates",
-        "ape",
-        "apes",
-        "mongoloid",
-        "mongoloids"
-    ]
-
-    monkey_emotes = [ #Emote responses to when someone triggers monkey keyword
-        ":monkey:",
-        ":gorilla:",
-        ":orangutan:",
-        ":monkey_face:",
-        "<:squadW:645483642381926421>"
-    ]
-
-    joker_recog_phrases = [ #Keywords to activate Joker
-        "society",
-        "societies",
-        "racist",
-        "racists",
-        "racism",
-        "funny",
-        "prejudice",
-        "terrorist",
-        "terrorists",
-        "terrorism",
-        "abuse",
-        "abuser",
-        "abusers",
-        "kino",
-        "kinophile",
-        "kinophiles",
-        "a24",
-        "misogyny",
-        "phile",
-        "philes",
-        "pedo",
-        "pedos",
-        "pedophile",
-        "pedophiles"
-    ]
-
-    horny_recog_phrases = [ #Keywords to activate Horny
-        "horny",
-        "gasm",
-        "hot",
-        "sexy",
-        "cute",
-        "butt",
-        "feet",
-        "toes",
-        "tits",
-        "boobs",
-        "<:triumph:805133291703369739>",
-        "cum"
-    ]
 
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
         for i in range(len(horny_recog_phrases)):
