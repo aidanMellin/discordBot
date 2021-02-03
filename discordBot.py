@@ -122,6 +122,7 @@ async def todo(ctx, *todo_arg):
         await ctx.channel.send(resp)
 
     elif todo_arg[0] == 'add': #Adding things to todo list
+        print("adding todo")
         todo_add("todo_persist/"+str(ctx.message.author.id),todo_arg)
         await ctx.channel.send("TODO added")
 
@@ -130,6 +131,7 @@ async def todo(ctx, *todo_arg):
         await ctx.channel.send("TODO deleted")
 
     elif todo_arg[0] == "view": #Print a formatted version of the user-specific todo list
+        print("viewing todo")
         resp = todo_view("todo_persist/"+str(ctx.message.author.id))
         await ctx.channel.send(resp)
 
@@ -165,7 +167,7 @@ async def on_ready():
 @tasks.loop(hours=24)
 async def change_daily_status():
     channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
-    day_status = ["","","wait it fucking tueaday .", "<:dizzy:1b3817ca3b1dc991baefdb3079ed0624>Wooback Wednesday","dababy dursday","",""] #Status for each dotw
+    day_status = ["","More like monGAY","wait it fucking tueaday .", "<:dizzy:1b3817ca3b1dc991baefdb3079ed0624>Wooback Wednesday","dababy dursday","",""] #Status for each dotw
     dotw = dt.datetime.today().weekday() #Day of the week
     await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
     if dotw == 4:
@@ -291,6 +293,7 @@ async def on_message(message):
             if horny_recog_phrases[i] in str(message.content).lower():
                 keyword = horny_recog_phrases[i]
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                    print('horny detected')
                     await message.channel.send(file = discord.File('horny.png'))
                     break
 
@@ -298,6 +301,7 @@ async def on_message(message):
             if joker_recog_phrases[i] in str(message.content).lower():
                 keyword = joker_recog_phrases[i]
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                    print('funnyman needed')
                     await message.channel.send("<:FunnyMan:776139957768945704>")
                     break
 
@@ -306,6 +310,7 @@ async def on_message(message):
                 keyword = monkey_recog_phrases[i]
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
                     response = random.choice(monkey_emotes)
+                    print('sending monkey')
                     await message.channel.send(response)
                     break
     
