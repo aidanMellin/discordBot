@@ -16,7 +16,7 @@ import asyncio
 import time
 
 from keywords import monkey_recog_phrases, monkey_emotes, joker_recog_phrases, horny_recog_phrases
-from todo import todo_add, todo_rm, todo_view, todo_p
+from todo import todo_main, todo_add, todo_rm, todo_view, todo_p
 """
 Load all variables (Bot guild and bot token))
 """
@@ -63,26 +63,9 @@ async def todo(ctx, *todo_arg):
     todo_arg = list(todo_arg)
     todo_arg[0] = str(todo_arg[0]).lower()
 
-    if todo_arg[0] == 'add': #Adding things to todo list
-        todo_add("todo_persist/"+str(ctx.message.author.id),todo_arg)
-        await ctx.channel.send("TODO added")
+    resp = todo_main(todo_arg, todo_arg[0])
 
-    elif 'remove' in todo_arg[0] or "rm" in todo_arg[0]: #Remove a (batch) of todo(s)
-        todo_rm("todo_persist/"+str(ctx.message.author.id), todo_arg)
-        await ctx.channel.send("TODO deleted")
-
-    elif todo_arg[0] == "view": #Print a formatted version of the user-specific todo list
-        resp = todo_view("todo_persist/"+str(ctx.message.author.id))
-        await ctx.channel.send(resp)
-
-    elif "p" in todo_arg[0][0]: #A prioritize method: Bolds the multiple? calls
-        todo_p("todo_persist/"+str(ctx.message.author.id),todo_arg)
-        await ctx.channel.send("TODO Prioritized")
-
-    elif todo_arg[0] == "clear":
-        open("todo_persist/"+str(ctx.message.author.id)+".txt", 'w').close()
-        await ctx.channel.send("TODO Cleared")
-    #await ctx.channel.send(todo_arg)
+    await ctx.channel.send(resp)
 
 @bot.event
 async def on_ready():
