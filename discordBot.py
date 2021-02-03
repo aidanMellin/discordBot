@@ -53,7 +53,7 @@ async def help(ctx, *help_args):
     await ctx.channel.send(resp) #After file has been read and formatted, send as one message to the channel the command was called from
 
 def todo_add(author, todo_arg):
-    with open(+author+".txt", 'a+') as fp: #Open as a+ so it appends to the bottom of the file (or creates it)
+    with open(author+".txt", 'a+') as fp: #Open as a+ so it appends to the bottom of the file (or creates it)
         fp.seek(0) #Redundancy
         todo_add = " ".join(todo_arg[1:]) #Each call will have one todo to add, so combine the split args into one string to add to todo
         fp.write(todo_add)
