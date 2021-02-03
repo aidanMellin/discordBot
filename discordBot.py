@@ -313,7 +313,7 @@ async def on_message(message):
         for i in range(len(horny_recog_phrases)):
             if horny_recog_phrases[i] in str(message.content).lower():
                 keyword = horny_recog_phrases[i]
-                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                if keyword in message.content:
                     await message.channel.send(file = discord.File('horny.png'))
                     break
 
