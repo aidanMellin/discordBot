@@ -15,8 +15,8 @@ import datetime as dt
 import asyncio
 import time
 
-from keywords.py import monkey_recog_phrases, monkey_emotes, joker_recog_phrases, horny_recog_phrases
-from todo.py import todo_add, todo_rm, todo_view, todo_p
+from keywords import monkey_recog_phrases, monkey_emotes, joker_recog_phrases, horny_recog_phrases
+from todo import todo_add, todo_rm, todo_view, todo_p
 """
 Load all variables (Bot guild and bot token))
 """
