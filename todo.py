@@ -1,22 +1,22 @@
-def todo_main(todo_arg, p_arg):
+def todo_main(todo_arg, p_arg, author):
 	resp = ''
-	if todo_arg[0] == 'add': #Adding things to todo list
-		todo_add("todo_persist/"+str(ctx.message.author.id),todo_arg)
+	if p_arg == 'add': #Adding things to todo list
+		todo_add("todo_persist/"+author,todo_arg)
 		resp = "TODO added"
 	
-	elif 'remove' in todo_arg[0] or "rm" in todo_arg[0]: #Remove a (batch) of todo(s)
-		todo_rm("todo_persist/"+str(ctx.message.author.id), todo_arg)
+	elif 'remove' in p_arg or "rm" in p_arg: #Remove a (batch) of todo(s)
+		todo_rm("todo_persist/"+author, todo_arg)
 		resp = "TODO deleted"
 
-	elif todo_arg[0] == "view": #Print a formatted version of the user-specific todo list
-		resp = todo_view("todo_persist/"+str(ctx.message.author.id))
+	elif p_arg == "view": #Print a formatted version of the user-specific todo list
+		resp = todo_view("todo_persist/"+author)
         
-	elif "p" in todo_arg[0][0]: #A prioritize method: Bolds the multiple? calls
-		todo_p("todo_persist/"+str(ctx.message.author.id),todo_arg)
+	elif "p" in p_arg[0]: #A prioritize method: Bolds the multiple? calls
+		todo_p("todo_persist/"+author,todo_arg)
 		resp = "TODO Prioritized"
 
-	elif todo_arg[0] == "clear":
-		open("todo_persist/"+str(ctx.message.author.id)+".txt", 'w').close()
+	elif p_arg == "clear":
+		open("todo_persist/"+author+".txt", 'w').close()
 		resp = "TODO Cleared"
 	return resp
 

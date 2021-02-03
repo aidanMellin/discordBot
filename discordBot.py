@@ -63,7 +63,7 @@ async def todo(ctx, *todo_arg):
     todo_arg = list(todo_arg)
     todo_arg[0] = str(todo_arg[0]).lower()
 
-    resp = todo_main(todo_arg, todo_arg[0])
+    resp = todo_main(todo_arg, todo_arg[0], str(ctx.message.author.id))
 
     await ctx.channel.send(resp)
 
