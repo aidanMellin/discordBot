@@ -314,7 +314,7 @@ async def on_message(message):
             if horny_recog_phrases[i] in str(message.content).lower():
                 keyword = horny_recog_phrases[i]
                 if keyword in message.content:
-                    await message.channel.send(file = discord.File('horny.png'))
+                    await message.channel.send(file = discord.File('media/horny.png'))
                     break
 
         for i in range(len(joker_recog_phrases)):
