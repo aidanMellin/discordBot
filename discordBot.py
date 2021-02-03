@@ -67,7 +67,7 @@ def todo_rm(author, todo_arg):
     """
     Removes already present todo's.
     """
-     with open(author+".txt", 'r') as fp: #Read the lines and store to a list for easier manipulation
+    with open(author+".txt", 'r') as fp: #Read the lines and store to a list for easier manipulation
         lines = fp.readlines()
         if len(todo_arg) > 2: #Multiple rm calls
             rm_obj = todo_arg[1:]
