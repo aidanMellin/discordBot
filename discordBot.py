@@ -33,7 +33,7 @@ async def help(ctx, *help_args):
     help_args = list(help_args)
     resp = ''
     if len(help_args) < 1: #No arg with help call
-        resp = "Usage:\n**~help [monke/joker/horny/todo]**"
+        resp = "(test) Usage:\n**~help [monke/joker/horny/todo]**"
     else: #Help call containing arg
         call = help_args[0]
         if "monke" in call: #Open monke.txt
