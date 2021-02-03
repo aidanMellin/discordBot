@@ -33,7 +33,7 @@ async def help(ctx, *help_args):
     help_args = list(help_args)
     resp = ''
     if len(help_args) < 1: #No arg with help call
-        resp = "(test) Usage:\n**~help [monke/joker/horny/todo]**"
+        resp = "Usage:\n**~help [monke/joker/horny/todo]**"
     else: #Help call containing arg
         call = help_args[0]
         if "monke" in call: #Open monke.txt
@@ -122,7 +122,6 @@ async def todo(ctx, *todo_arg):
         await ctx.channel.send(resp)
 
     elif todo_arg[0] == 'add': #Adding things to todo list
-        print("adding todo")
         todo_add("todo_persist/"+str(ctx.message.author.id),todo_arg)
         await ctx.channel.send("TODO added")
 
@@ -131,7 +130,6 @@ async def todo(ctx, *todo_arg):
         await ctx.channel.send("TODO deleted")
 
     elif todo_arg[0] == "view": #Print a formatted version of the user-specific todo list
-        print("viewing todo")
         resp = todo_view("todo_persist/"+str(ctx.message.author.id))
         await ctx.channel.send(resp)
 
@@ -176,8 +174,8 @@ async def change_daily_status():
 @change_daily_status.before_loop
 async def before_status():
     for _ in range(60*60*24):
-        if dt.datetime.now().hour == 17:
-            print("updating status")
+        if dt.datetime.now().hour == 0:
+            print("Updating status")
             return
         await asyncio.sleep(60*30) #Check every 30 minutes
 
@@ -293,7 +291,6 @@ async def on_message(message):
             if horny_recog_phrases[i] in str(message.content).lower():
                 keyword = horny_recog_phrases[i]
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
-                    print('horny detected')
                     await message.channel.send(file = discord.File('horny.png'))
                     break
 
@@ -301,7 +298,6 @@ async def on_message(message):
             if joker_recog_phrases[i] in str(message.content).lower():
                 keyword = joker_recog_phrases[i]
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
-                    print('funnyman needed')
                     await message.channel.send("<:FunnyMan:776139957768945704>")
                     break
 
@@ -310,10 +306,8 @@ async def on_message(message):
                 keyword = monkey_recog_phrases[i]
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
                     response = random.choice(monkey_emotes)
-                    print('sending monkey')
                     await message.channel.send(response)
                     break
     
     await bot.process_commands(message)
-
 bot.run(TOKEN)
