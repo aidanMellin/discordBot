@@ -79,7 +79,7 @@ async def change_daily_status():
     day_status = ["More like monGAY","wait it fucking tueaday .", ":dizzy: Wooback Wednesday","dababy dursday","test","test2"] #Status for each dotw
     dotw = dt.datetime.today().weekday() #Day of the week
     await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
-    if dotw == 4:
+    if dotw == 3:
         await channel.send(file=discord.File('media/dababy.gif'))
 
 @change_daily_status.before_loop
