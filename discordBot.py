@@ -17,6 +17,7 @@ import time
 
 from keywords import monkey_recog_phrases, monkey_emotes, joker_recog_phrases, horny_recog_phrases
 from todo import todo_main, todo_add, todo_rm, todo_view, todo_p
+from help import help_main
 """
 Load all variables (Bot guild and bot token))
 """
@@ -33,26 +34,7 @@ async def help(ctx, *help_args):
     Standard canned help message. Contents are stored in a text file 'help.txt', monke.txt, horny.txt, joker.txt, and todo.txt
     The various methods and functions were split into multiple help files so when one needs help they don't have to see one large list
     """
-    help_args = list(help_args)
-    resp = ''
-    if len(help_args) < 1: #No arg with help call
-        resp = "Usage:\n**~help [monke/joker/horny/todo]**"
-    else: #Help call containing arg
-        call = help_args[0]
-        if "monke" in call: #Open monke.txt
-            with open('help/monke.md','r') as fp:
-                resp = f"{fp.read()}".format(**locals())
-        elif "joker" in call: #Open joker.txt
-            with open('help/joker.md','r') as fp:
-                resp = f"{fp.read()}".format(**locals())
-        elif "horny" in call: #Open horny.txt
-            with open('help/horny.md','r') as fp:
-                resp = f"{fp.read()}".format(**locals())
-        elif "todo" in call: #Open todo.txt
-            with open('help/todo.md','r') as fp:
-                resp = f"{fp.read()}".format(**locals())
-        else:
-            resp = "invalid call"
+    resp = help_main(help_args)
     await ctx.channel.send(resp) #After file has been read and formatted, send as one message to the channel the command was called from
 
 @bot.command(pass_context = True)
@@ -106,10 +88,10 @@ async def before_status():
     The function that checks the timing of change_daily_status
     """
     for _ in range(60*60*24):
-        if dt.datetime.now().hour == 0:
+        if dt.datetime.now().hour == dt.datetime.now.hour: #Just a cheatsy way of keeping the if
             print("Updating status")
             return
-        await asyncio.sleep(60*30) #Check every 30 minutes
+        await asyncio.sleep(60*60*2) #Check every 30 minutes
 
 @tasks.loop(hours=24)
 async def daily_task():
