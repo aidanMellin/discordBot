@@ -76,7 +76,7 @@ async def change_daily_status():
     Updates the bot's status via "Playing game: , based on the day of the week"
     """
     channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
-    day_status = ["","More like monGAY","wait it fucking tueaday .", "<:dizzy:1b3817ca3b1dc991baefdb3079ed0624>Wooback Wednesday","dababy dursday","test","test2"] #Status for each dotw
+    day_status = ["More like monGAY","wait it fucking tueaday .", ":dizzy: Wooback Wednesday","dababy dursday","test","test2"] #Status for each dotw
     dotw = dt.datetime.today().weekday() #Day of the week
     await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
     if dotw == 4:
