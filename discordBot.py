@@ -76,7 +76,7 @@ async def change_daily_status():
     Updates the bot's status via "Playing game: , based on the day of the week"
     """
     channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
-    day_status = ["","More like monGAY","wait it fucking tueaday .", "<:dizzy:1b3817ca3b1dc991baefdb3079ed0624>Wooback Wednesday","dababy dursday","",""] #Status for each dotw
+    day_status = ["","More like monGAY","wait it fucking tueaday .", "<:dizzy:1b3817ca3b1dc991baefdb3079ed0624>Wooback Wednesday","dababy dursday","test","test2"] #Status for each dotw
     dotw = dt.datetime.today().weekday() #Day of the week
     await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
     if dotw == 4:
@@ -88,10 +88,10 @@ async def before_status():
     The function that checks the timing of change_daily_status
     """
     for _ in range(60*60*24):
-        if dt.datetime.now().hour == dt.datetime.now.hour: #Just a cheatsy way of keeping the if
+        if dt.datetime.now().hour >= 0: #Just a cheatsy way of keeping the if
             print("Updating status")
             return
-        await asyncio.sleep(60*60*2) #Check every 30 minutes
+        await asyncio.sleep(1) #Check every 30 minutes
 
 @tasks.loop(hours=24)
 async def daily_task():
