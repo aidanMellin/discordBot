@@ -18,6 +18,8 @@ import time
 from keywords import monkey_recog_phrases, monkey_emotes, joker_recog_phrases, horny_recog_phrases
 from todo import todo_main, todo_add, todo_rm, todo_view, todo_p
 from help import help_main
+
+
 """
 Load all variables (Bot guild and bot token))
 """
@@ -25,6 +27,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 todo_list = []
+L_TIMESTAMP = dt.datetime.utcnow() #Initialize this for a chat cooldown for anti-spam
 
 bot = commands.Bot(command_prefix='~', help_command=None) #Establish a command prefix to trigger the bot
 
@@ -121,29 +124,33 @@ async def on_message(message):
     """
     Bot checks sent messages. If a keyword or command is found, execute
     """
-    if message.author == bot.user: #If the bot sends a message, ifnore it (so theres no recursion)
-        return
-
-    if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
-        for i in range(len(horny_recog_phrases)):
-            if horny_recog_phrases[i] in str(message.content).lower():
-                await message.channel.send(file = discord.File('media/horny.jpg'))
-                break
-
-        for i in range(len(joker_recog_phrases)):
-            if joker_recog_phrases[i] in str(message.content).lower():
-                keyword = joker_recog_phrases[i]
-                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
-                    await message.channel.send("<:FunnyMan:776139957768945704>")
-                    break
-
-        for i in range(len(monkey_recog_phrases)): #Check if message has keywords
-            if monkey_recog_phrases[i] in str(message.content).lower():
-                keyword = monkey_recog_phrases[i]
-                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
-                    response = random.choice(monkey_emotes)
-                    await message.channel.send(response)
-                    break
     
+    time_diff = (dt.datetime.utcnow() - L_TIMESTAMP).total_seconds()
+    L_TIMESTAMP = dt.datetime.utcnow()
+    if time_diff > 5:
+        if message.author == bot.user: #If the bot sends a message, ifnore it (so theres no recursion)
+            return
+
+        if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
+            for i in range(len(horny_recog_phrases)):
+                if horny_recog_phrases[i] in str(message.content).lower():
+                    await message.channel.send(file = discord.File('media/horny.jpg'))
+                    break
+
+            for i in range(len(joker_recog_phrases)):
+                if joker_recog_phrases[i] in str(message.content).lower():
+                    keyword = joker_recog_phrases[i]
+                    if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                        await message.channel.send("<:FunnyMan:776139957768945704>")
+                        break
+
+            for i in range(len(monkey_recog_phrases)): #Check if message has keywords
+                if monkey_recog_phrases[i] in str(message.content).lower():
+                    keyword = monkey_recog_phrases[i]
+                    if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                        response = random.choice(monkey_emotes)
+                        await message.channel.send(response)
+                        break
+        
     await bot.process_commands(message)
 bot.run(TOKEN)
