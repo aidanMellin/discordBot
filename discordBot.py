@@ -3,8 +3,6 @@
 import os
 from os import path
 
-from AntiSpam import AntiSpamHandler
-
 import discord
 from discord.file import File
 from discord.ext import tasks
@@ -28,9 +26,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 todo_list = []
 
-intents = discord.Intents.default()
-bot = commands.Bot(command_prefix='~', help_command=None, intents=intents) #Establish a command prefix to trigger the bot
-bot.handler = AntiSpamHandler(bot)
+bot = commands.Bot(command_prefix='~', help_command=None) #Establish a command prefix to trigger the bot
 
 @bot.command(pass_context = True)
 async def help(ctx, *help_args):
@@ -125,7 +121,6 @@ async def on_message(message):
     """
     Bot checks sent messages. If a keyword or command is found, execute
     """
-    await bot.handler.propagate(message)
     if message.author == bot.user: #If the bot sends a message, ifnore it (so theres no recursion)
         return
 

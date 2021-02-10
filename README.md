@@ -3,7 +3,6 @@ a Bot for managing various discord tasks
 
 Some required packages for this bot:
     Discord
-    Discord-Anti-Spam
 
 This bot has a recurring daily task set for the time between 0900 to 0959 checking for
 a completed Daily Health Task that is localized to RIT. This is paired to the 
