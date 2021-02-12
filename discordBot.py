@@ -91,7 +91,7 @@ async def before_status():
     The function that checks the timing of change_daily_status
     """
     for _ in range(60*60*24):
-        if dt.datetime.now().hour >= 0: #Just a cheatsy way of keeping the if
+        if dt.datetime.now().hour == 0 or dt.datetime.now().hour == 22: #Just a cheatsy way of keeping the if
             print("Updating status")
             return
         await asyncio.sleep(1) #Check every 30 minutes
