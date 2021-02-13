@@ -1,24 +1,23 @@
 #!/usr/bin/python3
 # bot.py
+import asyncio
+import datetime as dt
 import os
+import random
+import time
+from datetime import date
 from os import path
 
 import discord
+from discord.ext import commands, tasks
 from discord.file import File
-from discord.ext import tasks
-from discord.ext import commands
 from dotenv import load_dotenv
 
-import random
-from datetime import date
-import datetime as dt
-import asyncio
-import time
-
-from keywords import monkey_recog_phrases, monkey_emotes, joker_recog_phrases, horny_recog_phrases
-from todo import todo_main, todo_add, todo_rm, todo_view, todo_p
+from minersRequest import request
 from help import help_main
-
+from keywords import (horny_recog_phrases, joker_recog_phrases, monkey_emotes,
+                      monkey_recog_phrases)
+from todo import todo_add, todo_main, todo_p, todo_rm, todo_view
 
 """
 Load all variables (Bot guild and bot token))
@@ -39,6 +38,19 @@ async def help(ctx, *help_args):
     """
     resp = help_main(help_args)
     await ctx.channel.send(resp) #After file has been read and formatted, send as one message to the channel the command was called from
+
+@bot.command(pass_context = True)
+async def miner(ctx, *miner_args):
+
+    if miner_args[0] == "config":
+        with open("miners/"+str(ctx.message.author.id)+".txt", "w+") as fp:
+            fp.write(miner_args[1])
+    if miner_args[0] == "view":
+        miner_ID = "";
+        with open("miners/"+str(ctx.message.author.id)+".txt", "r") as fp:
+            miner_ID = fp.readline()
+        resp = request(str(miner_ID),"a")
+        await ctx.channel.send(resp)
 
 @bot.command(pass_context = True)
 async def todo(ctx, *todo_arg):
@@ -91,7 +103,7 @@ async def before_status():
     The function that checks the timing of change_daily_status
     """
     for _ in range(60*60*24):
-        if dt.datetime.now().hour == 0 or dt.datetime.now().hour == 22: #Just a cheatsy way of keeping the if
+        if eval(dt.datetime.now().hour) >= 0: #Just a cheatsy way of keeping the if
             print("Updating status")
             return
         await asyncio.sleep(1) #Check every 30 minutes
