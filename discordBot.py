@@ -146,8 +146,10 @@ async def on_message(message):
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
         for i in range(len(horny_recog_phrases)):
             if horny_recog_phrases[i] in str(message.content).lower():
-                await message.channel.send(file = discord.File('media/horny.jpg'))
-                break
+                keyword = monkey_recog_phrases[i]
+                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                    await message.channel.send(file = discord.File('media/horny.jpg'))
+                    break
 
         for i in range(len(joker_recog_phrases)):
             if joker_recog_phrases[i] in str(message.content).lower():

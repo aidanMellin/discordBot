@@ -5,9 +5,11 @@ This function will send the 'go to horny jail' image when someone uses one of th
 	Cum
 	Cute
 	Feet
+	Gachi(bass)
 	Gasm
 	Horny
 	Hot
+	Krey
 	Sexy
 	Tits
 	Toes
