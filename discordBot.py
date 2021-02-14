@@ -4,7 +4,7 @@ import asyncio
 import datetime as dt
 import os
 import random
-from datetime import date
+from datetime import date, time
 import random as r
 
 import discord
@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 from minersRequest import request
 from help import help_main
 from keywords import (horny_recog_phrases, joker_recog_phrases, monkey_emotes,
-                      monkey_recog_phrases)
+                      monkey_recog_phrases, yo_recog_phrases)
 from todo import todo_add, todo_main, todo_p, todo_rm, todo_view
 
 """
@@ -25,7 +25,6 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 todo_list = []
-L_TIMESTAMP = dt.datetime.utcnow() #Initialize this for a chat cooldown for anti-spam
 
 bot = commands.Bot(command_prefix='~', help_command=None) #Establish a command prefix to trigger the bot
 
@@ -66,7 +65,8 @@ async def miner(ctx, *miner_args):
 
     if miner_args[0] == "config":
         with open("miners/"+str(ctx.message.author.id)+".txt", "w+") as fp:
-            fp.write(miner_args[1])
+            fp.write(miner_args[1].strip())
+        await ctx.channel.send("Miner configured")
     if miner_args[0] == "view":
         miner_ID = "";
         with open("miners/"+str(ctx.message.author.id)+".txt", "r") as fp:
@@ -116,6 +116,7 @@ async def change_daily_status():
     day_status = ["More like monGAY","wait it fucking tueaday .", ":dizzy: Wooback Wednesday","dababy dursday","Gotta get down on friday","FREEDOM!","Fuk. Class tomorrow"] #Status for each dotw
     dotw = dt.datetime.today().weekday() #Day of the week
     await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
+    await bot.get_channel(802923855161065495).send("Daily status updated")
     if dotw == 3:
         await channel.send(file=discord.File('media/dababy.gif'))
 
@@ -125,6 +126,7 @@ async def before_status():
     The function that checks the timing of change_daily_status
     """
     for _ in range(60*60*24):
+        print("Status dt is "+str(int(dt.datetime.now().hour) >= 0)+" [should be True]")
         if int(dt.datetime.now().hour) >= 0: #Just a cheatsy way of keeping the if
             print("Updating status")
             return
@@ -152,41 +154,52 @@ async def before_task():
             print("Checking Daily Health Result")
             return
         await asyncio.sleep(60*10)
-
+SPAM_COUNT = 0
 @bot.event
 async def on_message(message):
     """
     Bot checks sent messages. If a keyword or command is found, execute
     """
-    
-#    time_diff = (dt.datetime.utcnow() - L_TIMESTAMP).total_seconds()
-#    L_TIMESTAMP = dt.datetime.utcnow()
-#    if time_diff > 5:
     if message.author == bot.user: #If the bot sends a message, ifnore it (so theres no recursion)
         return
-
+    SPAM_COUNT = 0
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
-        for i in range(len(horny_recog_phrases)):
-            if horny_recog_phrases[i] in str(message.content).lower():
-                keyword = horny_recog_phrases[i]
+        for i in horny_recog_phrases:
+            if i in str(message.content).lower():
+                keyword = i
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
                     await message.channel.send(file = discord.File('media/horny.jpg'))
+                    SPAM_COUNT+=1
                     break
 
-        for i in range(len(joker_recog_phrases)):
-            if joker_recog_phrases[i] in str(message.content).lower():
-                keyword = joker_recog_phrases[i]
+        for i in joker_recog_phrases:
+            if i in str(message.content).lower():
+                keyword = i
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
                     await message.channel.send("<:FunnyMan:776139957768945704>")
+                    SPAM_COUNT+=1
                     break
 
-        for i in range(len(monkey_recog_phrases)): #Check if message has keywords
-            if monkey_recog_phrases[i] in str(message.content).lower():
-                keyword = monkey_recog_phrases[i]
+        for i in monkey_recog_phrases: #Check if message has keywords
+            if i in str(message.content).lower():
+                keyword = i
                 if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
                     response = random.choice(monkey_emotes)
                     await message.channel.send(response)
+                    SPAM_COUNT+=1
                     break
+        for i in yo_recog_phrases:
+            if i in str(message.content).lower():
+                keyword = i
+                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                    await message.channel.send("Y <:OMEGALUL:658807091200393217>")
+                    SPAM_COUNT+=1
+                    break
+                    
+    else:
+        await asyncio.sleep(5)
+        SPAM_COUNT = 0
+        
     
     await bot.process_commands(message)
 bot.run(TOKEN)

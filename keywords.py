@@ -12,7 +12,7 @@ monkey_recog_phrases = [ #Keywords to activate monkey
     "chimps",
     "train",
     "orangutan",
-    "orangutans"
+    "orangutans",
     "gorilla",
     "gorillas",
     "banana",
@@ -77,4 +77,11 @@ horny_recog_phrases = [ #Keywords to activate Horny
     "boobs",
     "<:triumph:805133291703369739>",
     "cum"
+]
+
+yo_recog_phrases = [
+    "yo",
+    "ow",
+    "<:omegalul:658807091200393217> W",
+    "overwatch"    
 ]
