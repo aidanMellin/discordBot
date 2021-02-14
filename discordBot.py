@@ -154,7 +154,7 @@ async def before_task():
             print("Checking Daily Health Result")
             return
         await asyncio.sleep(60*10)
-SPAM_COUNT = 0
+
 @bot.event
 async def on_message(message):
     """
@@ -196,10 +196,6 @@ async def on_message(message):
                     SPAM_COUNT+=1
                     break
                     
-    else:
-        await asyncio.sleep(5)
-        SPAM_COUNT = 0
-        
     
     await bot.process_commands(message)
 bot.run(TOKEN)
