@@ -65,7 +65,7 @@ async def miner(ctx, *miner_args):
 
     if miner_args[0] == "config":
         with open("miners/"+str(ctx.message.author.id)+".txt", "w+") as fp:
-            fp.write(miner_args[1].strip())
+            fp.write(str(miner_args[1]).strip())
         await ctx.channel.send("Miner configured")
     if miner_args[0] == "view":
         miner_ID = "";
