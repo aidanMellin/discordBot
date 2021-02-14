@@ -4,9 +4,8 @@ import asyncio
 import datetime as dt
 import os
 import random
-import time
 from datetime import date
-from os import path
+import random as r
 
 import discord
 from discord.ext import commands, tasks
@@ -38,6 +37,13 @@ async def help(ctx, *help_args):
     """
     resp = help_main(help_args)
     await ctx.channel.send(resp) #After file has been read and formatted, send as one message to the channel the command was called from
+
+@bot.command(pass_context = True)
+async def bugfact(ctx, *bf):
+    if len(bf) > 0:
+        await ctx.channel.send(file = discord.File("media/bugfacts/"+bf[0]+".jpg"))
+    else:
+        await ctx.channel.send(file = discord.File("media/bugfacts/"+str(r.randrange(1,67))+".jpg"))
 
 @bot.command(pass_context = True)
 async def clear(ctx):

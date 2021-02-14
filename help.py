@@ -2,7 +2,7 @@ def help_main(help_args):
     help_args = list(help_args)
     resp = ''
     if len(help_args) < 1: #No arg with help call
-        resp = "Usage:\n**~help [monke/joker/horny/todo/miners/status]**"
+        resp = "Usage:\n**~help [bugfact/horny/joker/monke/miner/status/todo]**"
     else: #Help call containing arg
         call = help_args[0]
         if "monke" in call: #Open monke.txt
@@ -22,6 +22,8 @@ def help_main(help_args):
                 resp = f"{fp.read()}".format(**locals())
         elif "status" in call:
             resp = "This function manually updates the daily status if it failed somehow\nUsage:\n\t**~status**"
+        elif "bugfact" in call:
+            resp = "This function sends a random bugfact, or a specific one if you know the number call\nUsage:\n\t**~bugfact [optional: bugfact_number]**"
         else:
             resp = "invalid call"
     return resp
