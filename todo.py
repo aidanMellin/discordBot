@@ -76,11 +76,9 @@ def todo_p(author, todo_arg):
         print(line_manip)
         if not "*" in line_manip:
             line_manip = "**"+line[int(todo_arg[1])-1].strip("\n")+"**\n"
+            return "TODO Prioritized"
         else:
-            time.sleep(2)
-            print("removing **")
             line_manip = line_manip.replace("*","")
-            print("New Line manip = "+line_manip)
         line[int(todo_arg[1])-1] = line_manip
     with open(author+".txt","w") as fp:
         for i in range(len(line_manip)):

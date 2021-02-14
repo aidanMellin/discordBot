@@ -40,6 +40,22 @@ async def help(ctx, *help_args):
     await ctx.channel.send(resp) #After file has been read and formatted, send as one message to the channel the command was called from
 
 @bot.command(pass_context = True)
+async def clear(ctx):
+    """
+    Clear code-monkey screen
+    """
+    channel = bot.get_channel(802923855161065495)
+    if ctx.message.author.id == 249542964844429313:
+        await channel.send("⠀\n"*42)
+    else:
+        await ctx.channel.send("no")
+        
+@bot.command(pass_context = True)
+async def status(ctx):
+    await ctx.channel.send("Manually updating status")
+    change_daily_status()
+
+@bot.command(pass_context = True)
 async def miner(ctx, *miner_args):
 
     if miner_args[0] == "config":
@@ -103,10 +119,10 @@ async def before_status():
     The function that checks the timing of change_daily_status
     """
     for _ in range(60*60*24):
-        if eval(dt.datetime.now().hour) >= 0: #Just a cheatsy way of keeping the if
+        if int(dt.datetime.now().hour) >= 0: #Just a cheatsy way of keeping the if
             print("Updating status")
             return
-        await asyncio.sleep(1) #Check every 30 minutes
+        await asyncio.sleep(60*30) #Check every 30 minutes
 
 @tasks.loop(hours=24)
 async def daily_task():
@@ -125,7 +141,7 @@ async def before_task():
     """
     Actually accounts for the 24 hour wait before loop
     """
-    for _ in range(60*60*24):  # loop the hole day
+    for _ in range(60*60*24):  # loop the whole day
         if dt.datetime.now().hour == 9:  # 24 hour format
             print("Checking Daily Health Result")
             return
