@@ -195,7 +195,5 @@ async def on_message(message):
                     await message.channel.send("Y <:OMEGALUL:658807091200393217>")
                     SPAM_COUNT+=1
                     break
-                    
-    
-    await bot.process_commands(message)
+        await bot.process_commands(message)
 bot.run(TOKEN)
