@@ -6,6 +6,7 @@ import os
 import random
 from datetime import date, time
 import random as r
+import string
 
 import discord
 from discord.ext import commands, tasks
@@ -112,90 +113,89 @@ async def change_daily_status():
     """
     Updates the bot's status via "Playing game: , based on the day of the week"
     """
-    channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
-    day_status = ["More like monGAY","wait it fucking tueaday .", ":dizzy: Wooback Wednesday","dababy dursday","Gotta get down on friday","FREEDOM!","Fuk. Class tomorrow"] #Status for each dotw
-    dotw = dt.datetime.today().weekday() #Day of the week
-    await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
-    await bot.get_channel(802923855161065495).send("Daily status updated")
-    if dotw == 3:
-        await channel.send(file=discord.File('media/dababy.gif'))
+    while True:
+        channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
+        day_status = ["More like monGAY","wait it fucking tueaday .", ":dizzy: Wooback Wednesday","dababy dursday","Gotta get down on friday","FREEDOM!","Fuk. Class tomorrow"] #Status for each dotw
+        dotw = dt.datetime.today().weekday() #Day of the week
+        await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
+        await bot.get_channel(802923855161065495).send("Daily status updated")
+        if dotw == 3:
+            await channel.send(file=discord.File('media/dababy.gif'))
+        
+        count = 0
+        while True:
+            if count <= 2:
+                count += 1
+                await asyncio.sleep(60*60) #Sleep for an hour (but 3 times) -> Update every 3 hours
+            else:
+                break
 
-@change_daily_status.before_loop
-async def before_status():
-    """
-    The function that checks the timing of change_daily_status
-    """
-    for _ in range(60*60*24):
-        print("Status dt is "+str(int(dt.datetime.now().hour) >= 0)+" [should be True]")
-        if int(dt.datetime.now().hour) >= 0: #Just a cheatsy way of keeping the if
-            print("Updating status")
-            return
-        await asyncio.sleep(60*30) #Check every 30 minutes
+# @change_daily_status.before_loop
+# async def before_status():
+#     """
+#     The function that checks the timing of change_daily_status
+#     """
+#     for _ in range(60*60*24):
+#         print("Status dt is "+str(int(dt.datetime.now().hour) >= 0)+" [should be True]")
+#         if int(dt.datetime.now().hour) >= 0: #Just a cheatsy way of keeping the if
+#             print("Updating status")
+#             return
+#         await asyncio.sleep(60*30) #Check every 30 minutes
 
 @tasks.loop(hours=24)
 async def daily_task():
     """
     This checks for the completed daily health screen and informs @me via discord ping if it has been completed successfully or not
     """
-    channel = bot.get_channel(802923855161065495)
-    screen = date.today().strftime('%d-%m-%Y')+".png"
-    if(os.path.exists("../dailyHealthBot/screens/"+screen)):
-        await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
-    else:
-        await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
+    while True:
+        channel = bot.get_channel(802923855161065495)
+        screen = date.today().strftime('%d-%m-%Y')+".png"
+        if(os.path.exists("../dailyHealthBot/screens/"+screen)):
+            await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
+        else:
+            await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
+        if dt.datetime.now().hour != 9:
+            await asyncio.sleep(60*10) #If it's not 9am sleep for 10 minutes and check again
     
-@daily_task.before_loop
-async def before_task():
-    """
-    Actually accounts for the 24 hour wait before loop
-    """
-    for _ in range(60*60*24):  # loop the whole day
-        if dt.datetime.now().hour == 9:  # 24 hour format
-            print("Checking Daily Health Result")
-            return
-        await asyncio.sleep(60*10)
+# @daily_task.before_loop
+# async def before_task():
+#     """
+#     Actually accounts for the 24 hour wait before loop
+#     """
+#     for _ in range(60*60*24):  # loop the whole day
+#         if dt.datetime.now().hour == 9:  # 24 hour format
+#             print("Checking Daily Health Result")
+#             return
+#         await asyncio.sleep(60*10)
 
 @bot.event
 async def on_message(message):
     """
     Bot checks sent messages. If a keyword or command is found, execute
     """
-    if message.author == bot.user: #If the bot sends a message, ifnore it (so theres no recursion)
+    if message.author == bot.user: #If the bot sends a message, ignore it (therefore no recursion)
         return
     SPAM_COUNT = 0
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
-        for i in horny_recog_phrases:
-            if i in str(message.content).lower():
-                keyword = i
-                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+        msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
+        for keyword in msg:
+            if not any(keyword in word and len(word) > len(keyword) for word in msg):
+                if keyword in horny_recog_phrases:
                     await message.channel.send(file = discord.File('media/horny.jpg'))
                     SPAM_COUNT+=1
                     break
-
-        for i in joker_recog_phrases:
-            if i in str(message.content).lower():
-                keyword = i
-                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                elif keyword in joker_recog_phrases:
                     await message.channel.send("<:FunnyMan:776139957768945704>")
                     SPAM_COUNT+=1
                     break
-
-        for i in monkey_recog_phrases: #Check if message has keywords
-            if i in str(message.content).lower():
-                keyword = i
-                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                elif keyword in monkey_recog_phrases:
                     response = random.choice(monkey_emotes)
                     await message.channel.send(response)
                     SPAM_COUNT+=1
                     break
-        for i in yo_recog_phrases:
-            if i in str(message.content).lower():
-                keyword = i
-                if not any(keyword in word and len(word) > len(keyword) for word in message.content.split()):
+                elif keyword in yo_recog_phrases:
                     await message.channel.send("Y <:OMEGALUL:658807091200393217>")
                     SPAM_COUNT+=1
-                    break
-                    
-    
+                    break        
     await bot.process_commands(message)
 bot.run(TOKEN)
