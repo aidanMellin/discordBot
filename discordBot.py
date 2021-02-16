@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 # bot.py
+
+#Standard packages
 import asyncio
 import datetime as dt
 import os
-import random
-from datetime import date, time
 import random as r
 import string
 
+#Custom packages
 import discord
 from discord.ext import commands, tasks
-from discord.file import File
 from dotenv import load_dotenv
 
 from minersRequest import request
@@ -100,7 +100,7 @@ async def on_ready():
     print(
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})\n'
-        f"Today's Date is: "+date.today().strftime('%d-%m-%Y')
+        f"Today's Date is: "+dt.date.today().strftime('%d-%m-%Y')
     )
     channel = bot.get_channel(802923855161065495)
     await channel.send("**Bot Established**")
@@ -130,18 +130,6 @@ async def change_daily_status():
             else:
                 break
 
-# @change_daily_status.before_loop
-# async def before_status():
-#     """
-#     The function that checks the timing of change_daily_status
-#     """
-#     for _ in range(60*60*24):
-#         print("Status dt is "+str(int(dt.datetime.now().hour) >= 0)+" [should be True]")
-#         if int(dt.datetime.now().hour) >= 0: #Just a cheatsy way of keeping the if
-#             print("Updating status")
-#             return
-#         await asyncio.sleep(60*30) #Check every 30 minutes
-
 @tasks.loop(hours=24)
 async def daily_task():
     """
@@ -149,24 +137,13 @@ async def daily_task():
     """
     while True:
         channel = bot.get_channel(802923855161065495)
-        screen = date.today().strftime('%d-%m-%Y')+".png"
+        screen = dt.date.today().strftime('%d-%m-%Y')+".png"
         if(os.path.exists("../dailyHealthBot/screens/"+screen)):
             await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
         else:
             await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
         if dt.datetime.now().hour != 9:
             await asyncio.sleep(60*10) #If it's not 9am sleep for 10 minutes and check again
-    
-# @daily_task.before_loop
-# async def before_task():
-#     """
-#     Actually accounts for the 24 hour wait before loop
-#     """
-#     for _ in range(60*60*24):  # loop the whole day
-#         if dt.datetime.now().hour == 9:  # 24 hour format
-#             print("Checking Daily Health Result")
-#             return
-#         await asyncio.sleep(60*10)
 
 @bot.event
 async def on_message(message):
@@ -189,7 +166,7 @@ async def on_message(message):
                     SPAM_COUNT+=1
                     break
                 elif keyword in monkey_recog_phrases:
-                    response = random.choice(monkey_emotes)
+                    response = r.choice(monkey_emotes)
                     await message.channel.send(response)
                     SPAM_COUNT+=1
                     break
