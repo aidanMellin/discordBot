@@ -156,22 +156,23 @@ async def on_message(message):
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
         msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
         for keyword in msg:
-            if not any(keyword in word and len(word) > len(keyword) for word in msg):
+            if not any(keyword in word and len(word) > len(keyword) for word in msg): #If keyword triggered, add reaction depending on msg
                 if keyword in horny_recog_phrases:
-                    await message.channel.send(file = discord.File('media/horny.jpg'))
+                    await message.add_reaction("<:bonk:811325146316668958>")
                     SPAM_COUNT+=1
                     break
                 elif keyword in joker_recog_phrases:
-                    await message.channel.send("<:FunnyMan:776139957768945704>")
+                    await message.add_reaction("<:FunnyMan:776139957768945704>")
                     SPAM_COUNT+=1
                     break
                 elif keyword in monkey_recog_phrases:
                     response = r.choice(monkey_emotes)
-                    await message.channel.send(response)
+                    await message.add_reaction(response)
                     SPAM_COUNT+=1
                     break
                 elif keyword in yo_recog_phrases:
-                    await message.channel.send("Y <:OMEGALUL:658807091200393217>")
+                    await message.add_reaction("🇾") #Regional y symbol
+                    await message.add_reaction("<:OMEGALUL:658807091200393217>")
                     SPAM_COUNT+=1
                     break        
     await bot.process_commands(message)
