@@ -153,6 +153,7 @@ async def on_message(message):
     if message.author == bot.user: #If the bot sends a message, ignore it (therefore no recursion)
         return
     SPAM_COUNT = 0
+    
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
         msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
         for keyword in msg:
@@ -174,6 +175,7 @@ async def on_message(message):
                     await message.add_reaction("🇾") #Regional y symbol
                     await message.add_reaction("<:OMEGALUL:658807091200393217>")
                     SPAM_COUNT+=1
-                    break        
+                    break       
     await bot.process_commands(message)
+    
 bot.run(TOKEN)
