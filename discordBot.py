@@ -142,7 +142,7 @@ async def daily_task():
             await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
         else:
             await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
-        if dt.datetime.now().hour != 9:
+        while dt.datetime.now().hour != 9:
             await asyncio.sleep(60*10) #If it's not 9am sleep for 10 minutes and check again
 
 @bot.event
