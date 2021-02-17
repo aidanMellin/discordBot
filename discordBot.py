@@ -152,30 +152,37 @@ async def on_message(message):
     """
     if message.author == bot.user: #If the bot sends a message, ignore it (therefore no recursion)
         return
-    SPAM_COUNT = 0
+    
+    TIMEOUT = 2 #Number of seconds to timeout bot per user
+    MAX_HIST = 5 #Pull last 5 messages sent to channel. Probably should be higher if a more active channel
+    
+    user_msg_diff = TIMEOUT #Init as allowing message
+    msg_hist = await message.channel.history(limit=MAX_HIST).flatten() #Fetch last 5 messages from channel
+    user_in_last_msgs = [bool(message.author.id == i.author.id) for i in msg_hist] #If the user is in the last 5 messages
+    
+    if True in user_in_last_msgs:
+        user_msg_diff = (message.created_at - msg_hist[user_in_last_msgs.index(True,1)].created_at).total_seconds()
     
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
-        msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
-        for keyword in msg:
-            if not any(keyword in word and len(word) > len(keyword) for word in msg): #If keyword triggered, add reaction depending on msg
-                if keyword in horny_recog_phrases:
-                    await message.add_reaction("<:bonk:811325146316668958>")
-                    SPAM_COUNT+=1
-                    break
-                elif keyword in joker_recog_phrases:
-                    await message.add_reaction("<:FunnyMan:776139957768945704>")
-                    SPAM_COUNT+=1
-                    break
-                elif keyword in monkey_recog_phrases:
-                    response = r.choice(monkey_emotes)
-                    await message.add_reaction(response)
-                    SPAM_COUNT+=1
-                    break
-                elif keyword in yo_recog_phrases:
-                    await message.add_reaction("🇾") #Regional y symbol
-                    await message.add_reaction("<:OMEGALUL:658807091200393217>")
-                    SPAM_COUNT+=1
-                    break       
+        if user_msg_diff >= TIMEOUT: #Not spam
+            msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
+            for keyword in msg:
+                if not any(keyword in word and len(word) > len(keyword) for word in msg): #If keyword triggered, add reaction depending on msg
+                    if keyword in horny_recog_phrases:
+                        await message.add_reaction("<:bonk:811325146316668958>")
+                        break
+                    elif keyword in joker_recog_phrases:
+                        await message.add_reaction("<:FunnyMan:776139957768945704>")
+                        break
+                    elif keyword in monkey_recog_phrases:
+                        response = r.choice(monkey_emotes)
+                        await message.add_reaction(response)
+                        break
+                    elif keyword in yo_recog_phrases:
+                        await message.add_reaction("🇾") #Regional y symbol
+                        await message.add_reaction("<:OMEGALUL:658807091200393217>")
+                        break      
+            user_msg_diff = 0 
     await bot.process_commands(message)
     
 bot.run(TOKEN)
