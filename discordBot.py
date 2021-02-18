@@ -115,10 +115,10 @@ async def change_daily_status():
     """
     while True:
         channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
-        day_status = ["More like monGAY","wait it fucking tueaday .", ":dizzy: Wooback Wednesday","dababy dursday","Gotta get down on friday","FREEDOM!","Fuk. Class tomorrow"] #Status for each dotw
+        day_status = ["More like monGAY","wait it fucking tueaday .", "<:dizzy:> Wooback Wednesday","dababy dursday","Gotta get down on friday","FREEDOM!","Fuk. Class tomorrow"] #Status for each dotw
         dotw = dt.datetime.today().weekday() #Day of the week
         await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
-        await bot.get_channel(802923855161065495).send("Daily status updated")
+        #await bot.get_channel(802923855161065495).send("Daily status updated")
         if dotw == 3:
             await channel.send(file=discord.File('media/dababy.gif'))
         
@@ -142,8 +142,22 @@ async def daily_task():
             await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
         else:
             await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
+            await asyncio.sleep(60*60) #Sleep for an hour after notifying to skip the 9am check in (prevents a messaging loop)
         while dt.datetime.now().hour != 9:
             await asyncio.sleep(60*10) #If it's not 9am sleep for 10 minutes and check again
+            
+async def get_diff(message,MAX_HIST):
+    msg_hist = await message.channel.history(limit=MAX_HIST+1).flatten() #Fetch last MAX_HIST messages from channel
+    user_in_last_msgs = [bool(message.author.id == i.author.id) for i in msg_hist][1:] #Exclude most recent message
+    print("user in last messages: "+ str(user_in_last_msgs))
+    if True in user_in_last_msgs:
+        user_msg_diff = (message.created_at - msg_hist[user_in_last_msgs.index(True)].created_at).total_seconds()
+        # print("Curr Msg created at:",message.created_at)
+        # print("msg_hist created at:", msg_hist[user_in_last_msgs.index(True)].created_at)
+        print("new user diff " + str(user_msg_diff) + " based on message "+message.content)
+    else:
+        user_msg_diff = 100 #Init as allowing message  
+    return abs(user_msg_diff)
 
 @bot.event
 async def on_message(message):
@@ -156,33 +170,26 @@ async def on_message(message):
     TIMEOUT = 2 #Number of seconds to timeout bot per user
     MAX_HIST = 5 #Pull last 5 messages sent to channel. Probably should be higher if a more active channel
     
-    user_msg_diff = TIMEOUT #Init as allowing message
-    msg_hist = await message.channel.history(limit=MAX_HIST).flatten() #Fetch last 5 messages from channel
-    user_in_last_msgs = [bool(message.author.id == i.author.id) for i in msg_hist] #If the user is in the last 5 messages
-    
-    if True in user_in_last_msgs:
-        user_msg_diff = (message.created_at - msg_hist[user_in_last_msgs.index(True,1)].created_at).total_seconds()
+    user_diff = await get_diff(message, MAX_HIST)
     
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
-        if user_msg_diff >= TIMEOUT: #Not spam
-            msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
-            for keyword in msg:
-                if not any(keyword in word and len(word) > len(keyword) for word in msg): #If keyword triggered, add reaction depending on msg
-                    if keyword in horny_recog_phrases:
-                        await message.add_reaction("<:bonk:811325146316668958>")
-                        break
-                    elif keyword in joker_recog_phrases:
-                        await message.add_reaction("<:FunnyMan:776139957768945704>")
-                        break
-                    elif keyword in monkey_recog_phrases:
-                        response = r.choice(monkey_emotes)
-                        await message.add_reaction(response)
-                        break
-                    elif keyword in yo_recog_phrases:
-                        await message.add_reaction("🇾") #Regional y symbol
-                        await message.add_reaction("<:OMEGALUL:658807091200393217>")
-                        break      
-            user_msg_diff = 0 
+        msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
+        for keyword in msg:
+            if not any(keyword in word and len(word) > len(keyword) for word in msg): #If keyword triggered, add reaction depending on msg
+                if keyword in horny_recog_phrases:
+                    await message.add_reaction("<:bonk:811325146316668958>")
+                    break
+                elif keyword in joker_recog_phrases:
+                    await message.add_reaction("<:FunnyMan:776139957768945704>")
+                    break
+                elif keyword in monkey_recog_phrases:
+                    response = r.choice(monkey_emotes)
+                    await message.add_reaction(response)
+                    break
+                elif keyword in yo_recog_phrases:
+                    await message.add_reaction("🇾") #Regional y symbol
+                    await message.add_reaction("<:OMEGALUL:658807091200393217>")
+                    break
     await bot.process_commands(message)
     
 bot.run(TOKEN)
