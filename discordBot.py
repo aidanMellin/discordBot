@@ -4,6 +4,7 @@
 #Standard packages
 import asyncio
 import datetime as dt
+from logging import disable
 import os
 import random as r
 import string
@@ -113,22 +114,24 @@ async def change_daily_status():
     """
     Updates the bot's status via "Playing game: , based on the day of the week"
     """
+    gif_sent = False
     while True:
         channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
         day_status = ["More like monGAY","wait it fucking tueaday .", "<:dizzy:> Wooback Wednesday","dababy dursday","Gotta get down on friday","FREEDOM!","Fuk. Class tomorrow"] #Status for each dotw
         dotw = dt.datetime.today().weekday() #Day of the week
         await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
         #await bot.get_channel(802923855161065495).send("Daily status updated")
-        if dotw == 3:
-            await channel.send(file=discord.File('media/dababy.gif'))
+        if not gif_sent:
+            if dotw == 3:
+                await channel.send(file=discord.File('media/gif/dababy.gif'))
+            if dotw == 4:
+                await channel.send(file=discord.File('media/gif/friday.gif'))
+            gif_sent = True
         
-        count = 0
-        while True:
-            if count <= 2:
-                count += 1
-                await asyncio.sleep(60*60) #Sleep for an hour (but 3 times) -> Update every 3 hours
-            else:
-                break
+        await asyncio.sleep(60*60*3) #Sleep for 3 hours
+        if dotw != dt.datetime.today().weekday(): #If the day changed after waiting for 3 hours
+            gif_sent = False
+        
 
 @tasks.loop(hours=24)
 async def daily_task():
