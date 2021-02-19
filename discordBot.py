@@ -38,6 +38,15 @@ async def help(ctx, *help_args):
     """
     resp = help_main(help_args)
     await ctx.channel.send(resp) #After file has been read and formatted, send as one message to the channel the command was called from
+    
+@bot.command()
+async def check(ctx):
+    channel = bot.get_channel(802923855161065495)
+    screen = dt.date.today().strftime('%d-%m-%Y')+".png"
+    if(os.path.exists("../dailyHealthBot/screens/"+screen)):
+        await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
+    else:
+        await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
 
 @bot.command(pass_context = True)
 async def bugfact(ctx, *bf):
