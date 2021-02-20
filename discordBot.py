@@ -26,21 +26,42 @@ Load all variables (Bot guild and bot token))
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+OWNER_ID = os.getenv('OWNER_ID')
 todo_list = []
 
 bot = commands.Bot(command_prefix='~', help_command=None) #Establish a command prefix to trigger the bot
 
 @bot.command(pass_context = True)
 async def help(ctx, *help_args):
-    """
-    Standard canned help message. Contents are stored in a text file 'help.txt', monke.txt, horny.txt, joker.txt, and todo.txt
+    """Standard canned help message. Contents are stored in a text file 'help.txt', monke.txt, horny.txt, joker.txt, and todo.txt
     The various methods and functions were split into multiple help files so when one needs help they don't have to see one large list
+
+    Args:
+        ctx (discord - context): Context of message that triggered command
     """
     resp = help_main(help_args)
     await ctx.channel.send(resp) #After file has been read and formatted, send as one message to the channel the command was called from
-    
+
+@bot.command(pass_context = True)
+async def bugfact(ctx, *bf):
+    """Send a random bugfact [or the one designated] to channel it was called from
+
+    Args:
+        ctx (discord - context): Context of message that triggered command
+        *bf (int): Optional bugfact number to be called 
+    """
+    if len(bf) > 0:
+        await ctx.channel.send(file = discord.File("media/bugfacts/"+bf[0]+".jpg"))
+    else:
+        await ctx.channel.send(file = discord.File("media/bugfacts/"+str(r.randrange(1,67))+".jpg"))
+        
 @bot.command()
 async def check(ctx):
+    """Manually check if daily health screen has been completed
+
+    Args:
+        ctx (discord - context): Context of message that triggered command
+    """
     channel = bot.get_channel(802923855161065495)
     screen = dt.date.today().strftime('%d-%m-%Y')+".png"
     if(os.path.exists("../dailyHealthBot/screens/"+screen)):
@@ -49,31 +70,26 @@ async def check(ctx):
         await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
 
 @bot.command(pass_context = True)
-async def bugfact(ctx, *bf):
-    if len(bf) > 0:
-        await ctx.channel.send(file = discord.File("media/bugfacts/"+bf[0]+".jpg"))
-    else:
-        await ctx.channel.send(file = discord.File("media/bugfacts/"+str(r.randrange(1,67))+".jpg"))
-
-@bot.command(pass_context = True)
 async def clear(ctx):
-    """
-    Clear code-monkey screen
+    """Clear code-monkey screen
+
+    Args:
+        ctx (discord - context): Context of message that triggered command
     """
     channel = bot.get_channel(802923855161065495)
-    if ctx.message.author.id == 249542964844429313:
+    if ctx.message.author.id == OWNER_ID:
         await channel.send("⠀\n"*42)
     else:
-        await ctx.channel.send("no")
+        await ctx.channel.send("You aren't allowed to clear messages")
         
 @bot.command(pass_context = True)
-async def status(ctx):
-    await ctx.channel.send("Manually updating status")
-    change_daily_status()
-
-@bot.command(pass_context = True)
 async def miner(ctx, *miner_args):
+    """Overall function associated with my current eth miner that can also be configured for other users.add()
+    Currently using 2miners API, and as such the actual site it is pulling from is eth.2miners.com
 
+    Args:
+        ctx (discord - context): Context of message that triggered command
+    """
     if miner_args[0] == "config":
         with open("miners/"+str(ctx.message.author.id)+".txt", "w+") as fp:
             fp.write(str(miner_args[1]).strip())
@@ -84,11 +100,35 @@ async def miner(ctx, *miner_args):
             miner_ID = fp.readline()
         resp = request(str(miner_ID),"a")
         await ctx.channel.send(resp)
+        
+@bot.command(pass_context = True)
+async def note(ctx,*args):
+    """Send a DM to the user (acts as a reminder)
+
+    Args:
+        ctx (discord - context): Context of message that triggered command
+        *args (string): The message
+    """
+    note_resp = "".join([i for i in args])
+    await ctx.author.send(note_resp)
+    await ctx.channel.send("Note DM'd to you <@{id}>".format(id=ctx.author.id))
+          
+@bot.command(pass_context = True)
+async def status(ctx):
+    """Manually update daily status
+
+    Args:
+        ctx (discord - context): Context of message that triggered command
+    """
+    await ctx.channel.send("Manually updating status")
+    change_daily_status()
 
 @bot.command(pass_context = True)
 async def todo(ctx, *todo_arg):
-    """
-    This handles todos that typically have to do with the bot.
+    """Generate TODOs for individual users in a persistent method
+
+    Args:
+        ctx (discord - context): Context of message that triggered command
     """
     todo_arg = list(todo_arg)
     todo_arg[0] = str(todo_arg[0]).lower()
@@ -101,12 +141,11 @@ async def todo(ctx, *todo_arg):
 async def on_ready():
     """
     When bot is being established, run through this (send message to signify bot has started)
-    """   
+    """
     guild = None 
     for guild in bot.guilds:
         if guild.name == GUILD:
             break
-
     print(
         f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})\n'
@@ -151,14 +190,23 @@ async def daily_task():
         channel = bot.get_channel(802923855161065495)
         screen = dt.date.today().strftime('%d-%m-%Y')+".png"
         if(os.path.exists("../dailyHealthBot/screens/"+screen)):
-            await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
+            await channel.send("*Found Daily Health Screen result* <@{owner}>".format(owner=OWNER_ID))
         else:
-            await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
+            await channel.send("*unable to locate today's completed daily health screen* <@{owner}>".format(owner=OWNER_ID))
             await asyncio.sleep(60*60) #Sleep for an hour after notifying to skip the 9am check in (prevents a messaging loop)
         while dt.datetime.now().hour != 9:
             await asyncio.sleep(60*10) #If it's not 9am sleep for 10 minutes and check again
             
 async def get_diff(message,MAX_HIST):
+    """WIP Function for implementing a SPAM checker for the discord bot
+
+    Args:
+        message (string): The message sent
+        MAX_HIST (int): Max number of messages to pull from channel for historical context
+
+    Returns:
+        int: abs val of the second difference between users last message and current message
+    """
     msg_hist = await message.channel.history(limit=MAX_HIST+1).flatten() #Fetch last MAX_HIST messages from channel
     user_in_last_msgs = [bool(message.author.id == i.author.id) for i in msg_hist][1:] #Exclude most recent message
     print("user in last messages: "+ str(user_in_last_msgs))
@@ -173,8 +221,10 @@ async def get_diff(message,MAX_HIST):
 
 @bot.event
 async def on_message(message):
-    """
-    Bot checks sent messages. If a keyword or command is found, execute
+    """Bot checks sent messages. If a keyword or command is found, execute
+
+    Args:
+        message (str): Keyword / command recognized
     """
     if message.author == bot.user: #If the bot sends a message, ignore it (therefore no recursion)
         return
