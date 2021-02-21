@@ -25,6 +25,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 todo_list = []
+
 bot = commands.Bot(command_prefix='~', help_command=None) #Establish a command prefix to trigger the bot
 
 @bot.command(pass_context = True)
