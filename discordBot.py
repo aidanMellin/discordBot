@@ -24,11 +24,8 @@ Load all variables (Bot guild and bot token))
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-<<<<<<< HEAD
 OWNER_ID = os.getenv('OWNER_ID')
 MINER_ID = os.getenv('MY_ID')
-=======
->>>>>>> cc2ac6d717fbd57679d834d9821a0876c934b753
 todo_list = []
 
 bot = commands.Bot(command_prefix='~', help_command=None) #Establish a command prefix to trigger the bot
@@ -51,7 +48,6 @@ async def bugfact(ctx, *bf):
         await ctx.channel.send(file = discord.File("media/bugfacts/"+bf[0]+".jpg"))
     else:
         await ctx.channel.send(file = discord.File("media/bugfacts/"+str(r.randrange(1,67))+".jpg"))
-<<<<<<< HEAD
         
 @bot.command()
 async def check(ctx):
@@ -66,25 +62,14 @@ async def check(ctx):
         await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
     else:
         await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
-        
-# @bot.command()
-# async def check_w(ctx):
-#     check_workers.start()
-=======
->>>>>>> cc2ac6d717fbd57679d834d9821a0876c934b753
 
 @bot.command(pass_context = True)
 async def clear(ctx):
     """
     Clear code-monkey screen
     """
-<<<<<<< HEAD
     channel = bot.get_channel(CODE_MONKE)
     if ctx.message.author.id == OWNER_ID:
-=======
-    channel = bot.get_channel(802923855161065495)
-    if ctx.message.author.id == 249542964844429313:
->>>>>>> cc2ac6d717fbd57679d834d9821a0876c934b753
         await channel.send("⠀\n"*42)
     else:
         await ctx.channel.send("no")
@@ -147,7 +132,6 @@ async def change_daily_status():
     """
     Updates the bot's status via "Playing game: , based on the day of the week"
     """
-<<<<<<< HEAD
     gif_sent = False
     while True:
         channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
@@ -165,14 +149,6 @@ async def change_daily_status():
         await asyncio.sleep(60*60*3) #Sleep for 3 hours
         if dotw != dt.datetime.today().weekday(): #If the day changed after waiting for 3 hours
             gif_sent = False
-=======
-    channel = bot.get_channel(426547798704521216) #ID of #aids channel in my server
-    day_status = ["More like monGAY","wait it fucking tueaday .", ":dizzy: Wooback Wednesday","dababy dursday","Gotta get down on friday","FREEDOM!","Fuk. Class tomorrow"] #Status for each dotw
-    dotw = dt.datetime.today().weekday() #Day of the week
-    await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
-    await bot.get_channel(802923855161065495).send("Daily status updated")
-    if dotw == 3:
-        await channel.send(file=discord.File('media/dababy.gif'))
 
 @change_daily_status.before_loop
 async def before_status():
@@ -185,7 +161,6 @@ async def before_status():
             print("Updating status")
             return
         await asyncio.sleep(60*30) #Check every 30 minutes
->>>>>>> cc2ac6d717fbd57679d834d9821a0876c934b753
 
 @tasks.loop(hours=2)
 async def check_workers():
@@ -209,7 +184,6 @@ async def daily_task():
     """
     This checks for the completed daily health screen and informs @me via discord ping if it has been completed successfully or not
     """
-<<<<<<< HEAD
     while True:
         channel = bot.get_channel(CODE_MONKE)
         screen = dt.date.today().strftime('%d-%m-%Y')+".png"
@@ -239,12 +213,6 @@ async def get_diff(message,MAX_HIST):
         # print("Curr Msg created at:",message.created_at)
         # print("msg_hist created at:", msg_hist[user_in_last_msgs.index(True)].created_at)
         print("new user diff " + str(user_msg_diff) + " based on message "+message.content)
-=======
-    channel = bot.get_channel(802923855161065495)
-    screen = date.today().strftime('%d-%m-%Y')+".png"
-    if(os.path.exists("../dailyHealthBot/screens/"+screen)):
-        await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
->>>>>>> cc2ac6d717fbd57679d834d9821a0876c934b753
     else:
         await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
     
