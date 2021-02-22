@@ -14,7 +14,7 @@ import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
-from minersRequest import request
+from minersRequest import request,get_spaces
 from help import help_main
 from keywords import (horny_recog_phrases, joker_recog_phrases, monkey_emotes,
                       monkey_recog_phrases, yo_recog_phrases)
@@ -27,9 +27,13 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 OWNER_ID = os.getenv('OWNER_ID')
+MINER_ID = os.getenv('MY_ID')
 todo_list = []
 
 bot = commands.Bot(command_prefix='~', help_command=None) #Establish a command prefix to trigger the bot
+
+CODE_MONKE = 802923855161065495
+SPACER = "`| "+ "-"*len(MINER_ID) +" |`\n"
 
 @bot.command(pass_context = True)
 async def help(ctx, *help_args):
@@ -62,12 +66,16 @@ async def check(ctx):
     Args:
         ctx (discord - context): Context of message that triggered command
     """
-    channel = bot.get_channel(802923855161065495)
+    channel = bot.get_channel(CODE_MONKE)
     screen = dt.date.today().strftime('%d-%m-%Y')+".png"
     if(os.path.exists("../dailyHealthBot/screens/"+screen)):
         await channel.send("*Found Daily Health Screen result* "+"<@249542964844429313>")
     else:
         await channel.send("*unable to locate today's completed daily health screen* "+"<@249542964844429313>")
+        
+# @bot.command()
+# async def check_w(ctx):
+#     check_workers.start()
 
 @bot.command(pass_context = True)
 async def clear(ctx):
@@ -76,7 +84,7 @@ async def clear(ctx):
     Args:
         ctx (discord - context): Context of message that triggered command
     """
-    channel = bot.get_channel(802923855161065495)
+    channel = bot.get_channel(CODE_MONKE)
     if ctx.message.author.id == OWNER_ID:
         await channel.send("⠀\n"*42)
     else:
@@ -151,9 +159,10 @@ async def on_ready():
         f'{guild.name}(id: {guild.id})\n'
         f"Today's Date is: "+dt.date.today().strftime('%d-%m-%Y')
     )
-    channel = bot.get_channel(802923855161065495)
+    channel = bot.get_channel(CODE_MONKE)
     await channel.send("**Bot Established**")
     change_daily_status.start()
+    check_workers.start()
     #COMMENT BELOW OUT IF YOU DONT NEED THE DAILY TASK
     daily_task.start()
 
@@ -168,7 +177,7 @@ async def change_daily_status():
         day_status = ["More like monGAY","wait it fucking tueaday .", "<:dizzy:> Wooback Wednesday","dababy dursday","Gotta get down on friday","FREEDOM!","Fuk. Class tomorrow"] #Status for each dotw
         dotw = dt.datetime.today().weekday() #Day of the week
         await bot.change_presence(activity=discord.Game(name=day_status[dotw]))
-        #await bot.get_channel(802923855161065495).send("Daily status updated")
+        #await bot.get_channel(CODE_MONKE).send("Daily status updated")
         if not gif_sent:
             if dotw == 3:
                 await channel.send(file=discord.File('media/gif/dababy.gif'))
@@ -179,15 +188,31 @@ async def change_daily_status():
         await asyncio.sleep(60*60*3) #Sleep for 3 hours
         if dotw != dt.datetime.today().weekday(): #If the day changed after waiting for 3 hours
             gif_sent = False
-        
 
+@tasks.loop(hours=2)
+async def check_workers():
+    channel = bot.get_channel(CODE_MONKE)
+    while True:
+        workers = request(str(MINER_ID),"w")
+        if workers == []: #Offline for too long such that it disappears from workers list on API
+            await channel.send("Workers offline")
+        else:
+            offline_workers = [i for i in workers if i[1] == 'True']
+            if not offline_workers == []:
+                resp = SPACER
+                resp += "".join(["`| "+MINER_ID+get_spaces(MINER_ID,MINER_ID)+" |`\n"+SPACER])
+                resp += "`| Workers Offline: " + get_spaces(MINER_ID,"Workers Offline: ")+"|`\n"+"".join(["`|      "+i+get_spaces(MINER_ID,"     "+i)+" |`\n"+SPACER for i in offline_workers])
+                resp += SPACER
+                await channel.send(resp+"<@{owner}>".format(owner = OWNER_ID))
+        await asyncio.sleep(60*60*2) #Sleep for 2 hours
+        
 @tasks.loop(hours=24)
 async def daily_task():
     """
     This checks for the completed daily health screen and informs @me via discord ping if it has been completed successfully or not
     """
     while True:
-        channel = bot.get_channel(802923855161065495)
+        channel = bot.get_channel(CODE_MONKE)
         screen = dt.date.today().strftime('%d-%m-%Y')+".png"
         if(os.path.exists("../dailyHealthBot/screens/"+screen)):
             await channel.send("*Found Daily Health Screen result* <@{owner}>".format(owner=OWNER_ID))

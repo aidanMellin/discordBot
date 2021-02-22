@@ -71,7 +71,7 @@ def get_all(ID,hr, bal, dec, wkrs):
     workers = [i[0]+": Offline = "+i[1] for i in workers]
             
     ret_str += "".join(["`| "+i+get_spaces(ID,i)+" |`\n"+spacer for i in calls])
-    ret_str += "`| Workers:" + get_spaces(ID,"Workers:")+" |`\n" + "".join(["`|      "+i+get_spaces(ID,"     "+i)+" |`\n"+spacer for i in workers])
+    ret_str += "`| Workers:" + get_spaces(ID,"Workers:")+" |`\n"+"".join(["`|      "+i+get_spaces(ID,"     "+i)+" |`\n"+spacer for i in workers])
     return ret_str
 
 def req_overall(rJson):
