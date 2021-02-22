@@ -214,7 +214,8 @@ async def daily_task():
             await channel.send("*Found Daily Health Screen result* <@{owner}>".format(owner=OWNER_ID))
         else:
             await channel.send("*unable to locate today's completed daily health screen* <@{owner}>".format(owner=OWNER_ID))
-            await asyncio.sleep(60*60) #Sleep for an hour after notifying to skip the 9am check in (prevents a messaging loop)
+        
+        await asyncio.sleep(60*60) #Sleep for an hour after notifying to skip the 9am check in (prevents a messaging loop)
         while dt.datetime.now().hour != 9:
             await asyncio.sleep(60*10) #If it's not 9am sleep for 10 minutes and check again
             
