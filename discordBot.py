@@ -113,7 +113,7 @@ async def note(ctx,*args):
         ctx (discord - context): Context of message that triggered command
         *args (string): The message
     """
-    note_resp = "".join([i for i in args])
+    note_resp = "".join([i+" " for i in args])
     await ctx.author.send(note_resp)
     await ctx.channel.send("Note DM'd to you <@{id}>".format(id=ctx.author.id))
           
