@@ -28,11 +28,10 @@ monkey_recog_phrases = [ #Keywords to activate monkey
 ]
 
 monkey_emotes = [ #Emote responses to when someone triggers monkey keyword
-    "🐒",
-    "🦍",
-    "🦧",
-    "🐵",
-    "🍌",
+    ":monkey:",
+    ":gorilla:",
+    ":orangutan:",
+    ":monkey_face:",
     "<:squadW:645483642381926421>"
 ]
 joker_recog_phrases = [ #Keywords to activate Joker
@@ -65,7 +64,6 @@ joker_recog_phrases = [ #Keywords to activate Joker
 horny_recog_phrases = [ #Keywords to activate Horny
     "horny",
     "gasm",
-    "bonk",
     "hot",
     "sexy",
     "gachi",

@@ -68,7 +68,6 @@ def get_all(ID,hr, bal, dec, wkrs):
         "Avg Hash: "+str(avg_hash(hr)),
     ]
     workers = get_workers(wkrs) #Call to get list of workers with offline state
-    workers = [i[0]+": Offline = "+i[1] for i in workers]
             
     ret_str += "".join(["`| "+i+get_spaces(ID,i)+" |`\n"+spacer for i in calls])
     ret_str += "`| Workers:" + get_spaces(ID,"Workers:")+" |`\n"+"".join(["`|      "+i+get_spaces(ID,"     "+i)+" |`\n"+spacer for i in workers])
@@ -92,8 +91,7 @@ def get_workers(workers):
     Returns:
         list: list of workers + offline state
     """
-    #ret = [i+": Offline = "+str(workers[i]['offline']) for i in workers.keys()]
-    ret = [[i,str(workers[i]['offline'])] for i in workers.keys()]
+    ret = [i+": Offline = "+str(workers[i]['offline']) for i in workers.keys()]
     return ret
 
 def avg_hash(hr):
@@ -134,9 +132,3 @@ def minerChart(rJson):
     for i in minerChart:
         if not (i["workerOnline"] == 0):
             pprint.pprint(i)
-            
-def test_workers():
-    
-    req = requests.get("https://eth.2miners.com/api/accounts/"+ID)
-    rJson = req.json()
-    print(get_workers(rJson["workers"]))
