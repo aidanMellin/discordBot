@@ -158,7 +158,7 @@ async def on_ready():
     channel = bot.get_channel(CODE_MONKE)
     await channel.send("**Bot Established**")
     change_daily_status.start()
-    check_workers.start()
+    #check_workers.start()
     #COMMENT BELOW OUT IF YOU DONT NEED THE DAILY TASK
     daily_task.start()
 
