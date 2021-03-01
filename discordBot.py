@@ -256,7 +256,7 @@ async def on_message(message):
     #user_diff = await get_diff(message, MAX_HIST)
     
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
-        msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
+        msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split(" ") #Get rid of punctuation and split message
         for keyword in msg:
             if not any(keyword in word and len(word) > len(keyword) for word in msg): #If keyword triggered, add reaction depending on msg
                 if keyword in monkey_recog_phrases:
