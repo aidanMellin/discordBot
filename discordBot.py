@@ -259,7 +259,7 @@ async def on_message(message):
         msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
         for keyword in msg:
             if not any(keyword in word and len(word) > len(keyword) for word in msg): #If keyword triggered, add reaction depending on msg
-                await bot.get_channel(CODE_MONKE).send(keyword)
+                #await bot.get_channel(CODE_MONKE).send(keyword)
                 if keyword in monkey_recog_phrases:
                     response = r.choice(monkey_emotes)
                     await message.add_reaction(response)
