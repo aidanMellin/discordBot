@@ -58,7 +58,8 @@ joker_recog_phrases = [ #Keywords to activate Joker
     "pedo",
     "pedos",
     "pedophile",
-    "pedophiles"
+    "pedophiles",
+    "joker"
 ]
 
 horny_recog_phrases = [ #Keywords to activate Horny
