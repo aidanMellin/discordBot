@@ -52,13 +52,13 @@ async def bugfact(ctx, *bf):
 
     Args:
         ctx (discord - context): Context of message that triggered command
-        *bf (int): Optional bugfact number to be called 
+        *bf (int): Optional bugfact number to be called
     """
     if len(bf) > 0:
         await ctx.channel.send(file = discord.File("media/bugfacts/"+bf[0]+".jpg"))
     else:
         await ctx.channel.send(file = discord.File("media/bugfacts/"+str(r.randrange(1,67))+".jpg"))
-        
+
 @bot.command()
 async def check(ctx):
     """Manually check if daily health screen has been completed
@@ -85,7 +85,7 @@ async def clear(ctx):
         await channel.send("⠀\n"*42)
     else:
         await ctx.channel.send("You aren't allowed to clear messages")
-        
+
 @bot.command(pass_context = True)
 async def miner(ctx, *miner_args):
     """Overall function associated with my current eth miner that can also be configured for other users.add()
@@ -104,7 +104,7 @@ async def miner(ctx, *miner_args):
             miner_ID = fp.readline()
         resp = request(str(miner_ID),"a")
         await ctx.channel.send(resp)
-        
+
 @bot.command(pass_context = True)
 async def note(ctx,*args):
     """Send a DM to the user (acts as a reminder)
@@ -116,7 +116,7 @@ async def note(ctx,*args):
     note_resp = "".join([i+" " for i in args])
     await ctx.author.send(note_resp)
     await ctx.channel.send("Note DM'd to you <@{id}>".format(id=ctx.author.id))
-          
+
 @bot.command(pass_context = True)
 async def status(ctx):
     """Manually update daily status
@@ -146,7 +146,7 @@ async def on_ready():
     """
     When bot is being established, run through this (send message to signify bot has started)
     """
-    guild = None 
+    guild = None
     for guild in bot.guilds:
         if guild.name == GUILD:
             break
@@ -180,7 +180,7 @@ async def change_daily_status():
             if dotw == 4:
                 await channel.send(file=discord.File('media/gif/friday.gif'))
             gif_sent = True
-        
+
         await asyncio.sleep(60*60*3) #Sleep for 3 hours
         if dotw != dt.datetime.today().weekday(): #If the day changed after waiting for 3 hours
             gif_sent = False
@@ -201,7 +201,7 @@ async def check_workers():
         else:
             await channel.send("Workers offline <@{owner}>".format(owner=OWNER_ID))
         await asyncio.sleep(60*60*2) #Sleep for 2 hours
-        
+
 @tasks.loop(hours=24)
 async def daily_task():
     """
@@ -214,11 +214,11 @@ async def daily_task():
             await channel.send("*Found Daily Health Screen result* <@{owner}>".format(owner=OWNER_ID))
         else:
             await channel.send("*unable to locate today's completed daily health screen* <@{owner}>".format(owner=OWNER_ID))
-        
+
         await asyncio.sleep(60*60) #Sleep for an hour after notifying to skip the 9am check in (prevents a messaging loop)
         while dt.datetime.now().hour != 9:
             await asyncio.sleep(60*10) #If it's not 9am sleep for 10 minutes and check again
-            
+
 async def get_diff(message,MAX_HIST):
     """WIP Function for implementing a SPAM checker for the discord bot
 
@@ -238,7 +238,7 @@ async def get_diff(message,MAX_HIST):
         # print("msg_hist created at:", msg_hist[user_in_last_msgs.index(True)].created_at)
         print("new user diff " + str(user_msg_diff) + " based on message "+message.content)
     else:
-        user_msg_diff = 100 #Init as allowing message  
+        user_msg_diff = 100 #Init as allowing message
     return abs(user_msg_diff)
 
 @bot.event
@@ -252,9 +252,9 @@ async def on_message(message):
         return
     # TIMEOUT = 2 #Number of seconds to timeout bot per user
     # MAX_HIST = 5 #Pull last 5 messages sent to channel. Probably should be higher if a more active channel
-    
+
     #user_diff = await get_diff(message, MAX_HIST)
-    
+
     if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
         msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
         for keyword in msg:
@@ -275,5 +275,5 @@ async def on_message(message):
                     await message.add_reaction("<:OMEGALUL:658807091200393217>")
                     break
     await bot.process_commands(message)
-    
+
 bot.run(TOKEN)
