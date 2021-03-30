@@ -28,10 +28,10 @@ monkey_recog_phrases = [ #Keywords to activate monkey
 ]
 
 monkey_emotes = [ #Emote responses to when someone triggers monkey keyword
-    "<:monkey:825895507686719498>",
-    "<:gorilla:825895756001968158>",
-    "<:orangutan:825895802634240010>",
-    "<:monkey_face:825895843868704790>",
+    "🐒",
+    "🦍",
+    "🦧",
+    "🐵",
     "<:squadW:645483642381926421>"
 ]
 
@@ -85,5 +85,5 @@ yo_recog_phrases = [
     "yo",
     "ow",
     "<:omegalul:658807091200393217> W",
-    "overwatch"    
+    "overwatch"
 ]
