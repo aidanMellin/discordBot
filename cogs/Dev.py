@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 from sys import version_info as sysv
 from os import listdir
+import asyncio
 
 class Dev(commands.Cog):
 	def __init__(self, bot):
@@ -18,7 +19,7 @@ class Dev(commands.Cog):
 	@commands.is_owner()
 	async def reload_all(self, ctx):
 		"""This commands reloads all the cogs in the `./cogs` folder.
-		
+
 		Note:
 			This command can be used only from the bot owner.
 			This command is hidden from the help menu.
@@ -34,6 +35,6 @@ class Dev(commands.Cog):
 			await message.edit(content=f'An error has occurred: {exc}', delete_after=20)
 		else:
 			await message.edit(content='All cogs have been reloaded.', delete_after=20)
-        
+
 def setup(bot):
 	bot.add_cog(Dev(bot))
