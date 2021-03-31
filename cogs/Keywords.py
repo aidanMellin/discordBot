@@ -8,11 +8,24 @@ from keywords import (horny_recog_phrases, joker_recog_phrases, monkey_emotes, m
 class Keywords(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        
-    @commands.Cog.listener()
+
+    @commands.command(name='bugfact')
+    async def bugfact(self, ctx, *bf):
+        """Send a random bugfact [or the one designated] to channel it was called from
+
+        Args:
+            ctx (discord - context): Context of message that triggered command
+            *bf (int): Optional bugfact number to be called
+        """
+        if len(bf) > 0:
+            await ctx.channel.send(file = discord.File("media/bugfacts/"+bf[0]+".jpg"))
+        else:
+            await ctx.channel.send(file = discord.File("media/bugfacts/"+str(r.randrange(1,67))+".jpg"))
+
+
     async def on_message(self,message):
         """Bot checks sent messages. If a keyword or command is found, execute
-    
+
         Args:
             message (str): Keyword / command recognized
         """
@@ -20,9 +33,9 @@ class Keywords(commands.Cog):
             return
         # TIMEOUT = 2 #Number of seconds to timeout bot per user
         # MAX_HIST = 5 #Pull last 5 messages sent to channel. Probably should be higher if a more active channel
-    
+
         #user_diff = await get_diff(message, MAX_HIST)
-    
+
         if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
             msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
             for keyword in msg:
@@ -42,6 +55,6 @@ class Keywords(commands.Cog):
                         await message.add_reaction("🇾") #Regional y symbol
                         await message.add_reaction("<:OMEGALUL:658807091200393217>")
                         break
-                        
+
 def setup(bot):
 	bot.add_cog(Keywords(bot))

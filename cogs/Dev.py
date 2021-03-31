@@ -36,5 +36,16 @@ class Dev(commands.Cog):
 		else:
 			await message.edit(content='All cogs have been reloaded.', delete_after=20)
 
+	@commands.command(name='clear', hidden=True)
+	@commands.is_owner()
+	async def clear(self,ctx):
+		#TODO clear function \n * 42
+		pass
+
+	@commands.command(name='gag')
+	async def gag(self, ctx):
+		#TODO Gag function
+		pass
+		
 def setup(bot):
 	bot.add_cog(Dev(bot))
