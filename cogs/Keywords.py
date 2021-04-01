@@ -22,7 +22,7 @@ class Keywords(commands.Cog):
         else:
             await ctx.channel.send(file = discord.File("media/bugfacts/"+str(r.randrange(1,67))+".jpg"))
 
-
+    @commands.Cog.listener()
     async def on_message(self,message):
         """Bot checks sent messages. If a keyword or command is found, execute
 
@@ -37,10 +37,11 @@ class Keywords(commands.Cog):
         #user_diff = await get_diff(message, MAX_HIST)
 
         if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
-            msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message
+            msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message\
+            print(msg)
             for keyword in msg:
                 if not any(keyword in word and len(word) > len(keyword) for word in msg): #If keyword triggered, add reaction depending on msg
-                    #await bot.get_channel(CODE_MONKE).send(keyword)
+                    print(keyword)
                     if keyword in monkey_recog_phrases:
                         response = r.choice(monkey_emotes)
                         await message.add_reaction(response)
