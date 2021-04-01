@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 from sys import version_info as sysv
 from os import listdir
+import string
 import asyncio
 
 class Dev(commands.Cog):
@@ -46,6 +47,12 @@ class Dev(commands.Cog):
 	async def gag(self, ctx):
 		#TODO Gag function
 		pass
+
+	@commands.command(name='python')
+	async def python(self,ctx):
+		resp = "```Python\n{code}```".format(code = str(ctx.message.content).replace("~python",""))
+		await ctx.message.delete()
+		await ctx.channel.send(resp)
 		
 def setup(bot):
 	bot.add_cog(Dev(bot))
