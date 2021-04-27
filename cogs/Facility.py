@@ -13,7 +13,7 @@ import time
 class CheckFitness(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-        self.avg_activity.start()
+        asyncio.run(self.avg_activity())
 
     @commands.command(name='checkGym')
     async def checkGym(self,ctx):
@@ -36,9 +36,13 @@ class CheckFitness(commands.Cog):
                 fitnessLevel = [n for n in i.split("</") if "Fitness Center" in n][0]
                 space_open = [n.replace('data-occupancy="','').replace('"','') for n in fitnessLevel.split(" ") if "data-occupancy" in n]
         return space_open
- 
-    @tasks.loop(hours=24)
+
     async def avg_activity(self):
+        while True:
+            self.avg_activity_data()
+            await asyncio.sleep(10)
+ 
+    def avg_activity_data(self):
         '''
         So the idea is to get a constant hourly average of the occupancy at the gym over a period of the open hours (which for now we will just say all day)
         The idea will be to create a JSON object defined by the hours where the contents includes
@@ -48,33 +52,31 @@ class CheckFitness(commands.Cog):
         to add an entry to the current average, the average will have to be multiplied by the # of entries, have the new value added, and then divide by new value by last recorded # of entries +1
         {hour: %d, avg: %d, entries: %d}
         '''
-        while True:
-            filePath = "jsonData.json"
-            if os.path.exists(filePath):
-                with open(filePath, 'r+') as fp:
-                    try:
-                        JSONData = json.load(fp)['facility'] #Load JSON Object
-                        hour = str(dt.datetime.now().hour) #Get the current hour and make it a string
-                        curr_value = int(self.get_fitness()[0]) #Get the total number of people in the gym
-                        curr_avg = int(JSONData[hour]['avg']) * int(JSONData[hour]['entries']) #Get the total entries in the JSON of the hour so far
-                        JSONData[hour]['entries'] = JSONData[hour]['entries'] + 1 #Increase entries by 1
-                        JSONData[hour]['avg'] = (curr_avg + curr_value) / int(JSONData[hour]['entries']) #Update the average
+    
+        filePath = "jsonData.json"
+        if os.path.exists(filePath):
+            with open(filePath, 'r+') as fp:
+                try:
+                    JSONData = json.load(fp)['facility'] #Load JSON Object
+                    hour = str(dt.datetime.now().hour) #Get the current hour and make it a string
+                    curr_value = int(self.get_fitness()[0]) #Get the total number of people in the gym
+                    curr_avg = int(JSONData[hour]['avg']) * int(JSONData[hour]['entries']) #Get the total entries in the JSON of the hour so far
+                    JSONData[hour]['entries'] = JSONData[hour]['entries'] + 1 #Increase entries by 1
+                    JSONData[hour]['avg'] = (curr_avg + curr_value) / int(JSONData[hour]['entries']) #Update the average
 
-                        # print("Current Number of people in the gym: {cv}\nCurrent Avg of people at this hour in the gym: {ca}\nNew calculated average: {js}".format(cv=curr_value,ca=curr_avg,js=JSONData[hour]['avg']))
+                    # print("Current Number of people in the gym: {cv}\nCurrent Avg of people at this hour in the gym: {ca}\nNew calculated average: {js}".format(cv=curr_value,ca=curr_avg,js=JSONData[hour]['avg']))
 
-                    except ValueError:
-                        print("No Current JSON Data, beginning new")
-                        #This json has to be like '{facility:{ 'hour':{ 'avg': 0, 'entries': 0}}'
-                        JSONData = {i:{'avg':0,'entries':0} for i in range(25)}
-        
-                    fp.seek(0)
-                    fp.truncate()
+                except ValueError:
+                    print("No Current JSON Data, beginning new")
+                    #This json has to be like '{facility:{ 'hour':{ 'avg': 0, 'entries': 0}}'
+                    JSONData = {i:{'avg':0,'entries':0} for i in range(25)}
+    
+                fp.seek(0)
+                fp.truncate()
 
-                    json.dump({'facility':JSONData},fp)
-
-                    await asyncio.sleep(60*15) #Sleep for 15 minutes
-            else:
-                os.mknod(filePath)
+                json.dump({'facility':JSONData},fp)
+        else:
+            os.mknod(filePath)
 
 def setup(bot):
     bot.add_cog(CheckFitness(bot))
