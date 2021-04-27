@@ -13,9 +13,9 @@ from multiprocessing import Pool
 load_dotenv()
 DICT_API_KEY = getenv('DICT_API_KEY')
 
-class Dictionary():
-    def __init__(self):
-        self.bot = None
+class Dictionary(commands.Cog):
+    def __init__(self,bot):
+        self.bot = bot
         
     def get_data(self,word):
         try:
@@ -33,6 +33,9 @@ class Dictionary():
         # sentence = [sentence[i][:-1] for i in range(len(sentence)) if sentence[i][-1] == 's']
         with Pool(5) as p:
             print(p.map(self.get_data,sentence))
+
+def setup(bot):
+    bot.add_cog(Dictionary(bot))
 
 
 if __name__ == '__main__':
