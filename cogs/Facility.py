@@ -21,7 +21,7 @@ class CheckFitness(commands.Cog):
         with open('jsonData.json','r') as fp:
             hour = str(dt.datetime.now().hour) #Get the current hour and make it a string
             avgActivity = json.load(fp)['facility'][hour]['avg']
-        rtn = " {spots_used} spots open out of 45, with a typical average of {avg}".format(spots_used = spots[0], avg=avgActivity)
+        rtn = " {spots_used} spots being used out of 45, with a typical average of {avg}".format(spots_used = spots[0], avg=avgActivity)
         await ctx.channel.send(rtn)
 
     def get_fitness(self):
