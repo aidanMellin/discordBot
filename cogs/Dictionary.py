@@ -37,9 +37,8 @@ class Dictionary(commands.Cog):
 def setup(bot):
     bot.add_cog(Dictionary(bot))
 
-
-if __name__ == '__main__':
-    Dict = Dictionary()
-    haiku = 'Haikus are hard. Sometimes they dont make sense. Refrigerator'
-    # Dict.process_input("are hard Sometimes they don't make sense refrigerator")
-    Dict.process_input('haikus')
+# if __name__ == '__main__':
+#     Dict = Dictionary()
+#     haiku = 'Haikus are hard. Sometimes they dont make sense. Refrigerator'
+#     # Dict.process_input("are hard Sometimes they don't make sense refrigerator")
+#     Dict.process_input('haikus')

@@ -77,6 +77,3 @@ class CheckFitness(commands.Cog):
 
 def setup(bot):
     bot.add_cog(CheckFitness(bot))
-
-if __name__ == "__main__":
-    cf = CheckFitness(None)
