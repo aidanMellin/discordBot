@@ -13,7 +13,7 @@ import time
 class CheckFitness(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-        asyncio.run(self.avg_activity())
+        self.avg_activity.start()
 
     @commands.command(name='checkGym')
     async def checkGym(self,ctx):
