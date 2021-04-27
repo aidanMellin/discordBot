@@ -18,11 +18,11 @@ class CheckFitness(commands.Cog):
     @commands.command(name='checkGym')
     async def checkGym(self,ctx):
         spots = self.get_fitness()
-        await self.avg_activity()
         with open('jsonData.json','r') as fp:
             hour = str(dt.datetime.now().hour) #Get the current hour and make it a string
             avgActivity = json.load(fp)['facility'][hour]['avg']
-        ctx.channel.send(spots[0],"spots open out of 45, with a typicall average of",avgActivity)
+        rtn = " {spots_used} spots open out of 45, with a typicall average of {avg}".format(spots_used = spots, avg=avgActivity)
+        await ctx.channel.send(rtn)
 
     def get_fitness(self):
         r = requests.get("https://recreation.rit.edu/facilityoccupancy")
@@ -34,9 +34,10 @@ class CheckFitness(commands.Cog):
         for i in finding_Fitness:
             if "Fitness Center" in i:
                 fitnessLevel = [n for n in i.split("</") if "Fitness Center" in n][0]
-                space_open = [n.replace('data-occupancy="','').replace('"','') for n in fitnessLevel.split(" ") if "data-occupancy" in n]
-        return space_open
+                space_used = [n.replace('data-occupancy="','').replace('"','') for n in fitnessLevel.split(" ") if "data-occupancy" in n]
+        return space_used
 
+    @tasks.loop()
     async def avg_activity(self):
         while True:
             self.avg_activity_data()
