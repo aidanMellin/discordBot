@@ -13,12 +13,12 @@ import time
 class CheckFitness(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-        self.avg_activity()
+        self.avg_activity.start()
 
     @commands.command(name='checkGym')
     async def checkGym(self,ctx):
         spots = self.get_fitness()
-        self.avg_activity()
+        await self.avg_activity()
         with open('jsonData.json','r') as fp:
             hour = str(dt.datetime.now().hour) #Get the current hour and make it a string
             avgActivity = json.load(fp)['facility'][hour]['avg']
@@ -36,8 +36,9 @@ class CheckFitness(commands.Cog):
                 fitnessLevel = [n for n in i.split("</") if "Fitness Center" in n][0]
                 space_open = [n.replace('data-occupancy="','').replace('"','') for n in fitnessLevel.split(" ") if "data-occupancy" in n]
         return space_open
-
-    def avg_activity(self):
+ 
+    @tasks.loop(hours=24)
+    async def avg_activity(self):
         '''
         So the idea is to get a constant hourly average of the occupancy at the gym over a period of the open hours (which for now we will just say all day)
         The idea will be to create a JSON object defined by the hours where the contents includes
@@ -71,9 +72,12 @@ class CheckFitness(commands.Cog):
 
                     json.dump({'facility':JSONData},fp)
 
-                    time.sleep(60*15) #Sleep for 15 minutes
+                    await asyncio.sleep(60*15) #Sleep for 15 minutes
             else:
                 os.mknod(filePath)
 
 def setup(bot):
     bot.add_cog(CheckFitness(bot))
+
+if __name__ == "__main__":
+    cf = CheckFitness(None)
