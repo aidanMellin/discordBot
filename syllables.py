@@ -24,7 +24,12 @@ class Syllables():
         return count
 
     def short_vowel(self):
-        pass
+        count = 0
+        for i in self.word:
+            if i in vowels:
+                count+=1
+        if count == 1:
+            return True
 
     def long_vowel(self):
         return [i for i in range(len(self.word)) if self.word[i] in vowels and self.word[i+1] in vowels]
@@ -37,9 +42,14 @@ class Syllables():
             return True
 
     def det_hyphen(self):
-        pass
+        print(self.dipthong())
 
-syb_generator = Syllables("mountainous")
-# syb_generator = Syllables("place")
+        print(self.short_vowel())
+        print(self.long_vowel())
+        print(self.silent_e())
 
-print(syb_generator.long_vowel())
+
+if __name__ == '__main__':
+    syb_generator = Syllables("mountainous")
+    # syb_generator = Syllables("place")
+    print(syb_generator.det_hyphen())
