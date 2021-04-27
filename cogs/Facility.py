@@ -40,7 +40,7 @@ class CheckFitness(commands.Cog):
     async def avg_activity(self):
         while True:
             self.avg_activity_data()
-            await asyncio.sleep(10)
+            await asyncio.sleep(60*15)
  
     def avg_activity_data(self):
         '''
