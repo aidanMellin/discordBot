@@ -17,6 +17,14 @@ class CheckFitness(commands.Cog):
 
     @commands.command(name='checkGym')
     async def checkGym(self,ctx):
+        """
+        Prints the number of people currently at the gym and the average number of people typically there at this time
+
+        Usage:
+            **~checkGym**
+        Args:
+            ctx: Discord Context Object
+        """
         spots = self.get_fitness()
         with open('jsonData.json','r') as fp:
             hour = str(dt.datetime.now().hour) #Get the current hour and make it a string
@@ -25,6 +33,11 @@ class CheckFitness(commands.Cog):
         await ctx.channel.send(rtn)
 
     def get_fitness(self):
+        """Using HTML requests (because the page is designed terribly) get the number of people currently at the gym
+
+        Returns:
+            [int]: number of people currently at the gym
+        """
         r = requests.get("https://recreation.rit.edu/facilityoccupancy")
         rT = r.text
         occCard = rT.split('<div class="occupancy-card-body">')
@@ -39,21 +52,17 @@ class CheckFitness(commands.Cog):
 
     @tasks.loop()
     async def avg_activity(self):
+        """This is a way of accessing the driver avg_activity tool such that the JSON file can be read after being edited 
+        (if this was one program, the file ) would not be closed until the method ends.
+        """
         while True:
             self.avg_activity_data()
             await asyncio.sleep(60*15)
  
     def avg_activity_data(self):
-        '''
-        So the idea is to get a constant hourly average of the occupancy at the gym over a period of the open hours (which for now we will just say all day)
-        The idea will be to create a JSON object defined by the hours where the contents includes
-        Current Average
-        #of entries
-
-        to add an entry to the current average, the average will have to be multiplied by the # of entries, have the new value added, and then divide by new value by last recorded # of entries +1
-        {hour: %d, avg: %d, entries: %d}
-        '''
-    
+        """
+        Determine current number of people at the gym, read the JSON and update the average accordingly
+        """
         filePath = "jsonData.json"
         if os.path.exists(filePath):
             with open(filePath, 'r+') as fp:
@@ -65,21 +74,24 @@ class CheckFitness(commands.Cog):
                     JSONData[hour]['entries'] = JSONData[hour]['entries'] + 1 #Increase entries by 1
                     JSONData[hour]['avg'] = (curr_avg + curr_value) / int(JSONData[hour]['entries']) #Update the average
 
-                    # print("Current Number of people in the gym: {cv}\nCurrent Avg of people at this hour in the gym: {ca}\nNew calculated average: {js}".format(cv=curr_value,ca=curr_avg,js=JSONData[hour]['avg']))
-
                 except ValueError:
                     print("No Current JSON Data, beginning new")
                     #This json has to be like '{facility:{ 'hour':{ 'avg': 0, 'entries': 0}}'
                     JSONData = {i:{'avg':0,'entries':0} for i in range(25)}
     
-                fp.seek(0)
-                fp.truncate()
+                fp.seek(0) #Seek to the beginning of the file
+                fp.truncate() #I'm honestly not too sure exactly what this does, but it is common practice to truncate.
 
-                json.dump({'facility':JSONData},fp)
+                json.dump({'facility':JSONData},fp) # Dump the data
         else:
             os.mknod(filePath)
 
 def setup(bot):
+    """Initialize the bot
+
+    Args:
+        bot Discord Bot object: Bot object to have the cog added to
+    """
     bot.add_cog(CheckFitness(bot))
 
 if __name__ == "__main__":

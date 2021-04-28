@@ -1,3 +1,5 @@
+#TODO add to JSON file
+
 monkey_recog_phrases = [ #Keywords to activate monkey
     ":monkey:",
     ":gorilla:",

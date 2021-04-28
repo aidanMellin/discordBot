@@ -1,3 +1,5 @@
+#TODO Change to manipulating the JSON file to save space
+
 def todo_main(todo_arg, p_arg, author):
 	resp = ''
 	if p_arg == 'add': #Adding things to todo list

@@ -41,6 +41,7 @@ class Tools(commands.Cog):
     
         Args:
             ctx (discord - context): Context of message that triggered command
+            *miner_args - Either configuration information or command to view data
         """
         if miner_args[0] == "config":
             with open("miners/"+str(ctx.message.author.id)+".txt", "w+") as fp:

@@ -31,10 +31,6 @@ class Keywords(commands.Cog):
         """
         if message.author == self.bot.user: #If the bot sends a message, ignore it (therefore no recursion)
             return
-        # TIMEOUT = 2 #Number of seconds to timeout bot per user
-        # MAX_HIST = 5 #Pull last 5 messages sent to channel. Probably should be higher if a more active channel
-
-        #user_diff = await get_diff(message, MAX_HIST)
 
         if "~" not in message.content: #Make sure that it's not a command where the keyword was found (this was an issue in the help calls)
             msg = str(message.content).lower().translate(str.maketrans('', '', string.punctuation)).split() #Get rid of punctuation and split message\
@@ -54,6 +50,7 @@ class Keywords(commands.Cog):
                         await message.add_reaction("🇾") #Regional y symbol
                         await message.add_reaction("<:OMEGALUL:658807091200393217>")
                         break
+            await asyncio.sleep(2)
 
 def setup(bot):
 	bot.add_cog(Keywords(bot))

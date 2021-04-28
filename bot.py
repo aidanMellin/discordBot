@@ -11,18 +11,18 @@ from os import getenv, listdir
 Load all variables (Bot guild and bot token))
 """
 load_dotenv()
-TOKEN = getenv('DISCORD_TOKEN')
-GUILD = getenv('DISCORD_GUILD')
-OWNER_ID = getenv('OWNER_ID')
-MINER_ID = getenv('MY_ID')
-CODE_MONKE = 802923855161065495
+TOKEN = getenv('DISCORD_TOKEN') # Discord Bot Token
+GUILD = getenv('DISCORD_GUILD') # Discord Guild Number
+OWNER_ID = getenv('OWNER_ID') # Owner ID
+MINER_ID = getenv('MY_ID') # My ID, could be different
+CODE_MONKE = 802923855161065495 # My code text channel
 
 cogs_dir = "cogs"
 
 bot = commands.Bot(command_prefix="~")
 
 @bot.event
-async def on_ready():
+async def on_ready(): #When the bot is started
     guild = None
     for guild in bot.guilds:
         if guild.name == GUILD:

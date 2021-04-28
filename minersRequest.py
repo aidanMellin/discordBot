@@ -1,6 +1,8 @@
 #Python3
 #Author Aidan Mellin
 
+#TODO Change persist to use JSON file
+
 import requests
 import pprint
 import math
