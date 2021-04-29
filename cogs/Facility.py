@@ -11,12 +11,12 @@ import time
 
 
 class CheckFitness(commands.Cog):
-    def __init__(self,bot):
+    def __init__(self, bot):
         self.bot = bot
         self.avg_activity.start()
 
     @commands.command(name='checkGym')
-    async def checkGym(self,ctx):
+    async def checkGym(self, ctx):
         """
         Prints the number of people currently at the gym and the average number of people typically there at this time
 
@@ -26,10 +26,12 @@ class CheckFitness(commands.Cog):
             ctx: Discord Context Object
         """
         spots = self.get_fitness()
-        with open('jsonData.json','r') as fp:
-            hour = str(dt.datetime.now().hour) #Get the current hour and make it a string
+        with open('jsonData.json', 'r') as fp:
+            # Get the current hour and make it a string
+            hour = str(dt.datetime.now().hour)
             avgActivity = json.load(fp)['facility'][hour]['avg']
-        rtn = " {spots_used} spots being used out of 45, with a typical average of {avg}".format(spots_used = spots[0], avg=avgActivity)
+        rtn = " {spots_used} spots being used out of 45, with a typical average of {avg}".format(
+            spots_used=spots[0], avg=avgActivity)
         await ctx.channel.send(rtn)
 
     def get_fitness(self):
@@ -46,8 +48,10 @@ class CheckFitness(commands.Cog):
                 finding_Fitness = occCard[i].split("<canvas id=")
         for i in finding_Fitness:
             if "Fitness Center" in i:
-                fitnessLevel = [n for n in i.split("</") if "Fitness Center" in n][0]
-                space_used = [n.replace('data-occupancy="','').replace('"','') for n in fitnessLevel.split(" ") if "data-occupancy" in n]
+                fitnessLevel = [n for n in i.split(
+                    "</") if "Fitness Center" in n][0]
+                space_used = [n.replace('data-occupancy="', '').replace('"', '')
+                              for n in fitnessLevel.split(" ") if "data-occupancy" in n]
         return space_used
 
     @tasks.loop()
@@ -58,33 +62,38 @@ class CheckFitness(commands.Cog):
         while True:
             self.avg_activity_data()
             await asyncio.sleep(60*15)
- 
+
     def avg_activity_data(self):
         """
         Determine current number of people at the gym, read the JSON and update the average accordingly
         """
         filePath = "jsonData.json"
         if os.path.exists(filePath):
-            with open(filePath, 'r+') as fp:
+            with open(filePath) as fp:
                 try:
-                    JSONData = json.load(fp)['facility'] #Load JSON Object
-                    hour = str(dt.datetime.now().hour) #Get the current hour and make it a string
-                    curr_value = int(self.get_fitness()[0]) #Get the total number of people in the gym
-                    curr_avg = int(JSONData[hour]['avg']) * int(JSONData[hour]['entries']) #Get the total entries in the JSON of the hour so far
-                    JSONData[hour]['entries'] = JSONData[hour]['entries'] + 1 #Increase entries by 1
-                    JSONData[hour]['avg'] = (curr_avg + curr_value) / int(JSONData[hour]['entries']) #Update the average
+                    JSONData = json.load(fp)['facility']  # Load JSON Object
+                    # Get the current hour and make it a string
+                    hour = str(dt.datetime.now().hour)
+                    # Get the total number of people in the gym
+                    curr_value = int(self.get_fitness()[0])
+                    # Get the total entries in the JSON of the hour so far
+                    curr_avg = int(JSONData[hour]['avg']) * \
+                        int(JSONData[hour]['entries'])
+                    # Increase entries by 1
+                    JSONData[hour]['entries'] = JSONData[hour]['entries'] + 1
+                    JSONData[hour]['avg'] = (
+                        curr_avg + curr_value) / int(JSONData[hour]['entries'])  # Update the average
 
                 except ValueError:
                     print("No Current JSON Data, beginning new")
-                    #This json has to be like '{facility:{ 'hour':{ 'avg': 0, 'entries': 0}}'
-                    JSONData = {i:{'avg':0,'entries':0} for i in range(25)}
-    
-                fp.seek(0) #Seek to the beginning of the file
-                fp.truncate() #I'm honestly not too sure exactly what this does, but it is common practice to truncate.
+                    # This json has to be like '{facility:{ 'hour':{ 'avg': 0, 'entries': 0}}'
+                    JSONData = {i: {'avg': 0, 'entries': 0} for i in range(25)}
 
-                json.dump({'facility':JSONData},fp) # Dump the data
+            with open(filePath, 'w') as f:
+                json.dump({'facility': JSONData}, f)  # Dump the data
         else:
             os.mknod(filePath)
+
 
 def setup(bot):
     """Initialize the bot
@@ -94,5 +103,7 @@ def setup(bot):
     """
     bot.add_cog(CheckFitness(bot))
 
+
 if __name__ == "__main__":
     cf = CheckFitness(None)
+    cf.checkGym(None)
