@@ -69,7 +69,7 @@ class CheckFitness(commands.Cog):
         """
         filePath = "jsonData.json"
         if os.path.exists(filePath):
-            with open(filePath) as fp:
+            with open(filePath, 'r') as fp:
                 try:
                     JSONData = json.load(fp)['facility']  # Load JSON Object
                     # Get the current hour and make it a string
@@ -89,7 +89,7 @@ class CheckFitness(commands.Cog):
                     # This json has to be like '{facility:{ 'hour':{ 'avg': 0, 'entries': 0}}'
                     JSONData = {i: {'avg': 0, 'entries': 0} for i in range(25)}
 
-            with open(filePath, 'w') as f:
+            with open(filePath, 'a') as f:
                 json.dump({'facility': JSONData}, f)  # Dump the data
         else:
             os.mknod(filePath)
