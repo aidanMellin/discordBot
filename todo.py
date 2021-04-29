@@ -2,6 +2,9 @@
 
 def todo_main(todo_arg, p_arg, author):
 	resp = ''
+
+    #TODO Open up JSON (create new entry if none), and maybe send the list as an argument because that is whats being changed? At the end of this just dump it
+
 	if p_arg == 'add': #Adding things to todo list
 		todo_add("todo_persist/"+author,todo_arg)
 		resp = "TODO added"
