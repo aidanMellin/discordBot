@@ -1,1 +1,189 @@
-{"facility": {"0": {"avg": 0, "entries": 12}, "1": {"avg": 0, "entries": 12}, "2": {"avg": 0, "entries": 12}, "3": {"avg": 0, "entries": 12}, "4": {"avg": 0, "entries": 12}, "5": {"avg": 0, "entries": 12}, "6": {"avg": 6.083333333333333, "entries": 12}, "7": {"avg": 12.166666666666666, "entries": 12}, "8": {"avg": 15.916666666666666, "entries": 12}, "9": {"avg": 14.25, "entries": 12}, "10": {"avg": 15.666666666666666, "entries": 12}, "11": {"avg": 21.875, "entries": 8}, "12": {"avg": 26.875, "entries": 8}, "13": {"avg": 26, "entries": 8}, "14": {"avg": 19.875, "entries": 8}, "15": {"avg": 26.11111111111111, "entries": 9}, "16": {"avg": 33.125, "entries": 8}, "17": {"avg": 35.25, "entries": 8}, "18": {"avg": 33, "entries": 8}, "19": {"avg": 33.75, "entries": 8}, "20": {"avg": 20.75, "entries": 8}, "21": {"avg": 0, "entries": 8}, "22": {"avg": 0, "entries": 13}, "23": {"avg": 0, "entries": 12}, "24": {"avg": 0, "entries": 0}}}
+{
+    "facility": {
+        "0": {
+            "avg": 0,
+            "entries": 12
+        },
+        "1": {
+            "avg": 0,
+            "entries": 12
+        },
+        "2": {
+            "avg": 0,
+            "entries": 12
+        },
+        "3": {
+            "avg": 0,
+            "entries": 12
+        },
+        "4": {
+            "avg": 0,
+            "entries": 12
+        },
+        "5": {
+            "avg": 0,
+            "entries": 12
+        },
+        "6": {
+            "avg": 6.083333333333333,
+            "entries": 12
+        },
+        "7": {
+            "avg": 12.166666666666666,
+            "entries": 12
+        },
+        "8": {
+            "avg": 15.916666666666666,
+            "entries": 12
+        },
+        "9": {
+            "avg": 14.25,
+            "entries": 12
+        },
+        "10": {
+            "avg": 16.818181818181817,
+            "entries": 11
+        },
+        "11": {
+            "avg": 21.875,
+            "entries": 8
+        },
+        "12": {
+            "avg": 26.875,
+            "entries": 8
+        },
+        "13": {
+            "avg": 26,
+            "entries": 8
+        },
+        "14": {
+            "avg": 19.875,
+            "entries": 8
+        },
+        "15": {
+            "avg": 26.11111111111111,
+            "entries": 9
+        },
+        "16": {
+            "avg": 33.125,
+            "entries": 8
+        },
+        "17": {
+            "avg": 35.25,
+            "entries": 8
+        },
+        "18": {
+            "avg": 33,
+            "entries": 8
+        },
+        "19": {
+            "avg": 33.75,
+            "entries": 8
+        },
+        "20": {
+            "avg": 20.75,
+            "entries": 8
+        },
+        "21": {
+            "avg": 0,
+            "entries": 8
+        },
+        "22": {
+            "avg": 0,
+            "entries": 13
+        },
+        "23": {
+            "avg": 0,
+            "entries": 12
+        },
+        "24": {
+            "avg": 0,
+            "entries": 0
+        }
+    },
+    "monkey_recog_phrases":[
+        ":monkey:",
+        ":gorilla:",
+        ":orangutan:",
+        ":monkey_face:",
+        "monke",
+        "monkey",
+        "pimp",
+        "pimps",
+        "chimp",
+        "chimpin",
+        "chimps",
+        "train",
+        "orangutan",
+        "orangutans",
+        "gorilla",
+        "gorillas",
+        "banana",
+        "bananas",
+        "peanut",
+        "peanuts",
+        "primate",
+        "primates",
+        "ape",
+        "apes",
+        "mongoloid",
+        "mongoloids"
+    ],
+    "monkey_emotes":[
+        "🐒",
+        "🦍",
+        "🦧",
+        "🐵",
+        "<:squadW:645483642381926421>"
+    ],
+    "joker_recog_phrases":[
+        "society",
+        "societies",
+        "racist",
+        "racists",
+        "racism",
+        "funny",
+        "prejudice",
+        "terrorist",
+        "terrorists",
+        "terrorism",
+        "abuse",
+        "abuser",
+        "abusers",
+        "kino",
+        "kinophile",
+        "kinophiles",
+        "a24",
+        "misogyny",
+        "phile",
+        "philes",
+        "pedo",
+        "pedos",
+        "pedophile",
+        "pedophiles",
+        "joker"
+    ],
+    "horny_recog_phrases":[
+        "horny",
+        "gasm",
+        "hot",
+        "sexy",
+        "gachi",
+        "gachibass",
+        "krey",
+        "cute",
+        "butt",
+        "feet",
+        "toes",
+        "tits",
+        "boobs",
+        "<:triumph:805133291703369739>",
+        "cum"
+    ],
+    "yo_recog":[
+    "yo",
+    "ow",
+    "<:omegalul:658807091200393217> W",
+    "overwatch"
+]
+}
