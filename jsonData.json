@@ -1,4 +1,4 @@
-{
+{ "JSONData":{
     "facility": {
         "0": {
             "avg": 0,
@@ -181,11 +181,12 @@
             "<:triumph:805133291703369739>",
             "cum"
         ],
-        "yo_recog": [
+        "yo_recog":[
             "yo",
             "ow",
             "<:omegalul:658807091200393217> W",
             "overwatch"
         ]
     }
+}
 }
