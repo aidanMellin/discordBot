@@ -1,4 +1,4 @@
-{ "JSONData":{
+{
     "facility": {
         "0": {
             "avg": 0,
@@ -45,8 +45,8 @@
             "entries": 11
         },
         "11": {
-            "avg": 21.875,
-            "entries": 8
+            "avg": 18.133333333333333,
+            "entries": 15
         },
         "12": {
             "avg": 26.875,
@@ -181,12 +181,21 @@
             "<:triumph:805133291703369739>",
             "cum"
         ],
-        "yo_recog":[
+        "yo_recog": [
             "yo",
             "ow",
             "<:omegalul:658807091200393217> W",
             "overwatch"
         ]
+    },
+    "todo": {
+        "249542964844429313": [
+            "Remind-me function",
+            "remind me Wooback Wednesday - Status and Post",
+            "todo_edit",
+            "todo_p_batch",
+            "todo_p_undo",
+            "**submit algo**"
+        ]
     }
-}
 }

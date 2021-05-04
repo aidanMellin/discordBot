@@ -11,9 +11,11 @@ import time
 
 
 class CheckFitness(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.avg_activity.start()
+        self.filePath = "jsonData.json"
 
     @commands.command(name='checkGym')
     async def checkGym(self, ctx):
@@ -26,7 +28,7 @@ class CheckFitness(commands.Cog):
             ctx: Discord Context Object
         """
         spots = self.get_fitness()
-        with open('jsonData.json', 'r') as fp:
+        with open(self.filePath, 'r') as fp:
             # Get the current hour and make it a string
             hour = str(dt.datetime.now().hour)
             avgActivity = json.load(fp)['facility'][hour]['avg']
@@ -67,11 +69,15 @@ class CheckFitness(commands.Cog):
         """
         Determine current number of people at the gym, read the JSON and update the average accordingly
         """
-        filePath = "jsonData.json"
-        if os.path.exists(filePath):
-            with open(filePath, 'r') as fp:
+        if os.path.exists(self.filePath):
+            with open(self.filePath, 'r') as fp:
                 try:
-                    JSONData = json.load(fp)['facility']  # Load JSON Object
+                    # Load JSON Object
+                    allJSON = json.load(fp)
+                    keywordJSON = allJSON['keywords']
+                    todoJSON = allJSON['todo']
+
+                    JSONData = allJSON['facility']
                     # Get the current hour and make it a string
                     hour = str(dt.datetime.now().hour)
                     # Get the total number of people in the gym
@@ -87,10 +93,14 @@ class CheckFitness(commands.Cog):
                 except ValueError:
                     print("No Current JSON Data, beginning new")
                     # This json has to be like '{facility:{ 'hour':{ 'avg': 0, 'entries': 0}}'
-                    JSONData = {i: {'avg': 0, 'entries': 0} for i in range(25)}
+                    JSONData = {i:
+                                {'avg': 0,
+                                 'entries': 0} for i in range(25)}
 
-            with open(filePath, 'a') as f:
-                json.dump({'facility': JSONData}, f)  # Dump the data
+            with open(self.filePath, 'w') as f:
+                # Dump the data
+                json.dump(
+                    {'facility': JSONData, 'keywords': keywordJSON, 'todo': todoJSON}, f)
         else:
             os.mknod(filePath)
 
