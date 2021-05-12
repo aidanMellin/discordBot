@@ -16,7 +16,7 @@ class Daily(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         self.change_daily_status.start()
-        self.daily_task.start()
+        # self.daily_task.start()
     
     @tasks.loop(hours=24)
     async def change_daily_status(self):

@@ -15,6 +15,7 @@ class Dev(commands.Cog):
 	async def on_ready(self):
 		print(f'Python {sysv.major}.{sysv.minor}.{sysv.micro} - Disord.py {discord.__version__}\n')
 		#Prints on the shell the version of Python and Discord.py installed in our computer.
+		await self.bot.get_channel(802923855161065495).send(f'Python {sysv.major}.{sysv.minor}.{sysv.micro} - Disord.py {discord.__version__}')
 
 	@commands.command(name='reloadall', hidden=True)#This command is hidden from the help menu.
 	@commands.is_owner()

@@ -14,7 +14,7 @@ class CheckFitness(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.avg_activity.start()
+        #self.avg_activity.start()
         self.filePath = "jsonData.json"
 
     @commands.command(name='checkGym')
