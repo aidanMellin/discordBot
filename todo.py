@@ -5,12 +5,6 @@ def todo_main(todo_arg, p_arg, author):
 
 # TODO Open up JSON (create new entry if none), and maybe send the list as an argument because that is whats being changed? At the end of this just dump it
 
-# try:
-
-# except ValueError as e:
-#     print(e,"Creating new JSON Todo entry")
-#     todos = []
-
     if p_arg == 'add':  # Adding things to todo list
         todo_add("todo_persist/"+author, todo_arg)
         resp = "TODO added"
