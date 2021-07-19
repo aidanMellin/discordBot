@@ -5,6 +5,7 @@ from discord.ext import commands
 import os
 import json
 from simplejson import JSONDecodeError
+import asyncio
 
 
 class Keywords(commands.Cog):

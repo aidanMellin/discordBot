@@ -1,12 +1,14 @@
-#Author: Aidan Mellin
+# Author: Aidan Mellin
 '''
 The primary purpose of this program is to use basic english words to try and split words based on their syllables. This can then be implemented for multiple things, including a rudimentary hypenator and a haiku generator
 '''
 
-test = "Haikus are hard. Sometimes they dont make sense. Refrigerator" #Count the number of syllables in this entry
+# Count the number of syllables in this entry
+test = "Haikus are hard. Sometimes they dont make sense. Refrigerator"
 
 
-vowels = ['a','e','i','o','u']
+vowels = ['a', 'e', 'i', 'o', 'u']
+
 
 class Syllables():
     def __init__(self, word):
@@ -14,20 +16,22 @@ class Syllables():
         self.split_syllables = []
 
     def dipthong(self):
-        dipthongs = ['oo','ou','ar','oi','oy','or','oo','er','ar','an','en','ir','on']
+        dipthongs = ['oo', 'ou', 'ar', 'oi', 'oy', 'or',
+                     'oo', 'er', 'ar', 'an', 'en', 'ir', 'on']
         count = 0
         # for i in range(len(self.word)):
         #     if self.word[i] in vowels and self.word[i]+self.word[i+1] in dipthongs:
         #         count += 1
 
-        count = [i for i in range(len(self.word)) if self.word[i] in vowels and self.word[i]+self.word[i+1] in dipthongs]
+        count = [i for i in range(len(self.word)) if self.word[i]
+                 in vowels and self.word[i]+self.word[i+1] in dipthongs]
         return count
 
     def short_vowel(self):
         count = 0
         for i in self.word:
             if i in vowels:
-                count+=1
+                count += 1
         if count == 1:
             return True
 
