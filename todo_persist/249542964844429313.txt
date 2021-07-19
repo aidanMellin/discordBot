@@ -1,6 +1,0 @@
-Remind-me function
-remind me Wooback Wednesday - Status and Post
-todo_edit
-todo_p_batch
-todo_p_undo
-**submit algo**
